@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { MessagesService } from './messages.service';
+import { PaginateMessageDto } from './dto/paginate-message.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
@@ -13,8 +14,8 @@ export class MessagesController {
   }
 
   @Get()
-  findAll() {
-    return this.messagesService.findAll();
+  paginate(@Query() paginateMessageDto: PaginateMessageDto) {
+    return this.messagesService.paginate(paginateMessageDto);
   }
 
   @Get(':id')

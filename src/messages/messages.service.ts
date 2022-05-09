@@ -16,6 +16,21 @@ export class MessagesService {
     return new this.messageModel(createMessageDto).save();
   }
 
+  async paginate(payload: any) {
+    const skip: number = payload.skip
+      ? payload.skip
+      : 0;
+    const limit: number = payload.limit
+      ? payload.limit
+      : 10;
+    const messages = this.messageModel
+      .find()
+      .skip(skip)
+      .limit(limit);
+
+    return messages;
+  }
+
   async findAll() {
     return this.messageModel.find();
   }
