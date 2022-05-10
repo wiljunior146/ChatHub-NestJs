@@ -1,14 +1,28 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import helmet from 'helmet';
+import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, ValidationError, BadRequestException } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(helmet());
+  app.enableCors({
+	  'origin': '*',
+	  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+	  'preflightContinue': false,
+	  'optionsSuccessStatus': 204
+	});
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({
     exceptionFactory: (validationErrors: ValidationError[] = []) => {
       return new BadRequestException(validationErrors);
     },
   }));
-  await app.listen(3000);
+
+  const port = app.get(ConfigService).get('app.port');
+  await app.listen(port);
 }
+
 bootstrap();

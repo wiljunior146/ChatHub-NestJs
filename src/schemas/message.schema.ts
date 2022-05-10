@@ -7,6 +7,12 @@ export type MessageDocument = Message & Document;
 export class Message {
   @Prop({ required: true })
   content: string;
+
+  @Prop({ required: true, default: Date.now() })
+  created_at: Date;
+
+  @Prop({ required: false })
+  updated_at: Date;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);

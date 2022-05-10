@@ -1,6 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  HttpStatus,
+  Res,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query
+ } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 import { MessagesService } from './messages.service';
-import { PaginateMessageDto } from './dto/paginate-message.dto';
+import { GetMessageDto } from './dto/get-message.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
@@ -14,8 +26,12 @@ export class MessagesController {
   }
 
   @Get()
-  paginate(@Query() paginateMessageDto: PaginateMessageDto) {
-    return this.messagesService.paginate(paginateMessageDto);
+  @ApiResponse({ status: 201 })
+  async findAll(@Query() getMessageDto: GetMessageDto, @Res() res) {
+    const messages = await this.messagesService.findAll(getMessageDto);
+    return res.json({
+      data: messages
+    });
   }
 
   @Get(':id')
