@@ -1,20 +1,21 @@
 import { Module } from '@nestjs/common';
-import { MessagesModule } from './messages/messages.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MessagesModule } from './models/messages/messages.module';
+import { AuthModule } from './authentication/auth.module';
+import { UsersModule } from './models/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { User } from './models/users/entities/user.entity';
+import { Message } from './models/messages/entities/message.entity';
+import { ProfileModule } from './models/profile/profile.module';
+
 import appConfig from './config/app';
 import databaseConfig from './config/database';
 
 @Module({
   imports: [
-    AuthModule,
-    UsersModule,
-    MessagesModule,
     ConfigModule.forRoot({
       load: [appConfig, databaseConfig]
     }),
@@ -26,13 +27,25 @@ import databaseConfig from './config/database';
         limit: config.get<number>('app.rateLimiting.limit')
       })
     }),
-    MongooseModule.forRootAsync({
+    TypeOrmModule.forRootAsync({
     	imports: [ConfigModule],
       inject: [ConfigService],
 		  useFactory: (config: ConfigService) => ({
-        uri: config.get<string>('database.connection')
+        type: 'mongodb',
+        url: config.get<string>('database.connection'),
+        entities: [
+          User,
+          Message
+        ],
+        synchronize: true,
+        useNewUrlParser: true,
+        logging: true
       })
-    })
+    }),
+    AuthModule,
+    UsersModule,
+    MessagesModule,
+    ProfileModule
   ],
   providers: [
     {
