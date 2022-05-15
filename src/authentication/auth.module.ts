@@ -12,6 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/models/users/entities/user.entity';
 import appConfig from 'src/config/app';
 import databaseConfig from 'src/config/database';
+import { UserUniqueRule } from 'src/common/validations/users/user-unique.validator';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import databaseConfig from 'src/config/database';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, UsersService, LocalStrategy, JwtStrategy, UserUniqueRule],
   exports: [AuthService]
 })
 

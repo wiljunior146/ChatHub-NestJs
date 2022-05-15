@@ -31,7 +31,7 @@ export class MessagesService {
           }
         }
       ])
-      .next();
+      .toArray();
     return messages;
   }
 

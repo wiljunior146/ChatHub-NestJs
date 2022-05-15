@@ -22,10 +22,10 @@ export class User {
   @Column()
   last_name: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()

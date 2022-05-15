@@ -20,8 +20,8 @@ export class UsersService {
     return await this.usersRepository.findOne(id);
   }
 
-  findOneByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
-    return this.usersRepository.findOne({
+  async findOneByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
+    return await this.usersRepository.findOne({
       where: {
         $or: [
           { email: usernameOrEmail },
@@ -29,6 +29,10 @@ export class UsersService {
         ]
       }
     });
+  }
+
+  async count (payload: object): Promise<number> {
+    return await this.usersRepository.count(payload);
   }
 
   async create(payload: CreateUserDto): Promise<User> {

@@ -11,7 +11,7 @@ import {
 import { LocalAuthGuard } from 'src/common/guards/local-auth.guard';
 import { AuthService } from './auth.service';
 import { UsersService } from '../models/users/users.service';
-import { CreateUserDto } from '../models/users/dto/create-user.dto';
+import { RegisterDto } from './dto/register.dto';
 import { User } from 'src/models/users/entities/user.entity';
 import { Role } from 'src/common/enums/role.enum';
 
@@ -22,16 +22,16 @@ export class AuthController {
     private usersService: UsersService
   ) {}
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
+  @UseGuards(LocalAuthGuard)
+  async login(@Request() req): Promise<{ access_token: string }> {
     return this.authService.login(req.user);
   }
 
   @Post('register')
   @UseInterceptors(ClassSerializerInterceptor)
-  async register(@Body() createUserDto: CreateUserDto): Promise<User> {
-    const payload = {...createUserDto, role: Role.User };
+  async register(@Body() registerDto: RegisterDto): Promise<User> {
+    const payload = {...registerDto, role: Role.User };
     const user = await this.usersService.create(payload);
     return new User(user);
   }
