@@ -6,15 +6,13 @@ import {
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/models/users/users.service';
 
-@ValidatorConstraint({ name: 'UserUniqueRule', async: true })
 @Injectable()
+@ValidatorConstraint({ name: 'UserUniqueRule', async: true })
 export class UserUniqueRule implements ValidatorConstraintInterface {
   constructor(private usersService: UsersService) {}
 
   async validate(value: string, validationArguments: any) {
-    const property: string = validationArguments.property;
-    const payload: object = {};
-    payload[property] = value;
+    const payload: object = { [validationArguments.property]: value };
 
     const totalFound = await this.usersService.count(payload);
 
@@ -22,6 +20,6 @@ export class UserUniqueRule implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    return args.property + ' already existed.';
+    return args.property + ' already existed';
   }
 }

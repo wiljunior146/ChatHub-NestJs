@@ -14,7 +14,7 @@ import { User } from 'src/models/users/entities/user.entity';
 export class Message implements MessageInterface {
   @ObjectIdColumn()
   @Transform(({ value }) => value.toString())
-  id: string;
+  _id: string;
 
   @Column()
   content: string;

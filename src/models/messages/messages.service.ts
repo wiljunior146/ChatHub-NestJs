@@ -29,14 +29,17 @@ export class MessagesService {
             foreignField: '_id',
             as: 'receiver',
           }
-        }
+        },
+        { $unwind: '$receiver' },
+        { $unwind: '$sender' }
       ])
+      .limit(1)
       .toArray();
     return messages;
   }
 
   async findOne(id: string): Promise<Message> {
-    return await this.messagesRepository.findOne({ id: id });
+    return await this.messagesRepository.findOne({ _id: id });
   }
 
   async create(payload: any): Promise<Message> {
@@ -45,7 +48,7 @@ export class MessagesService {
       created_at: new Date,
       updated_at: new Date
     };
-    return this.messagesRepository.save(data);
+    return await this.messagesRepository.save(data);
   }
 
   async remove(id: string): Promise<Message> {

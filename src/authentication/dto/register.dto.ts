@@ -1,5 +1,5 @@
 import { IsString, Length, Validate } from 'class-validator';
-import { UserUnique } from 'src/common/decorators/user-unique.decorator';
+import { UserUnique } from 'src/common/decorators/validations/user-unique.decorator';
 
 export class RegisterDto {
   @IsString()

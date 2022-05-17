@@ -14,7 +14,7 @@ import { Message } from 'src/models/messages/entities/message.entity';
 export class User {
   @ObjectIdColumn()
   @Transform(({ value }) => value.toString())
-  id: string;
+  _id: string;
 
   @Column()
   first_name: string;

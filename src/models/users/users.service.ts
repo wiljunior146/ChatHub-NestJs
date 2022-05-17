@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -35,13 +34,16 @@ export class UsersService {
     return await this.usersRepository.count(payload);
   }
 
-  async create(payload: CreateUserDto): Promise<User> {
-    const { password, ...data }: any = payload;
-    const saltOrRounds = 10;
+  async create(payload: object): Promise<User> {
+    return await this.usersRepository.save(payload);
+  }
 
-    data.password = await bcrypt.hash(password, saltOrRounds);
-
-    return await this.usersRepository.save(data);
+  async update(id: number, payload: object): Promise<User> {
+    const user = await this.usersRepository.findOneOrFail(id);
+    return await this.usersRepository.save({
+      ...user,
+      ...payload
+    });
   }
 
   async remove(id: string): Promise<User> {
