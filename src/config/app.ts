@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config'
 
 export default registerAs('app', () => ({
+  name: process.env.APP_NAME || 'NestJs',
   port: parseInt(process.env.APP_PORT, 10) || 3000,
   secretKey: process.env.APP_SECRET_KEY,
   rateLimiting: {

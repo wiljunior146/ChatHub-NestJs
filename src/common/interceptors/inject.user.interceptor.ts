@@ -5,8 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-
-export const REQUEST_CONTEXT = '_requestContext';
+import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
 
 /**
  * Injecting request object to a custom validation class.
@@ -19,6 +18,8 @@ export const REQUEST_CONTEXT = '_requestContext';
  * 
  * This might happen on mongodb only since it only happens
  * if the property is an instance of ObjectId.
+ *
+ * @class
  */
 @Injectable()
 export class InjectUserInterceptor implements NestInterceptor {

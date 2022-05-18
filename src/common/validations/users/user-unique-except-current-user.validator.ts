@@ -6,7 +6,7 @@ import {
   ValidationArguments
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import { REQUEST_CONTEXT } from 'src/common/interceptors/inject.user.interceptor';
+import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
 import { UsersService } from 'src/models/users/users.service';
 import { ObjectId } from 'mongodb';
 

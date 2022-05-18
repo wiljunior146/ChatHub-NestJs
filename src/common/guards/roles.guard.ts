@@ -7,7 +7,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { Role } from 'src/common/enums/role.enum';
-import { ROLES_KEY } from 'src/common/decorators/roles.decorator';
+import { ROLES_KEY } from 'src/common/constants/app.constant';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

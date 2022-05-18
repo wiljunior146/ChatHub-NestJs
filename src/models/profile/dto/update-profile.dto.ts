@@ -8,7 +8,7 @@ import {
 import {
   UserUniqueExceptCurrentUser
 } from 'src/common/decorators/validations/user-unique-except-current-user.decorator';
-import { REQUEST_CONTEXT } from 'src/common/interceptors/inject.user.interceptor';
+import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
 
 export class UpdateProfileDto {
   @IsString()

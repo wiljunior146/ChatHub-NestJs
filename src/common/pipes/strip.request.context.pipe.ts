@@ -1,6 +1,6 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
 import { omit } from 'lodash';
-import { REQUEST_CONTEXT } from 'src/common/interceptors/inject.user.interceptor';
+import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
 
 /**
  * @note This will removed REQUEST_CONTEXT property before

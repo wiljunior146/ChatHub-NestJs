@@ -4,7 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { useContainer } from 'class-validator';
-import { REQUEST_CONTEXT } from 'src/common/interceptors/inject.user.interceptor';
+import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
 import { ValidationPipe, ValidationError, BadRequestException, HttpStatus } from '@nestjs/common';
 
 async function bootstrap() {

@@ -42,7 +42,7 @@ export class MessagesService {
     return await this.messagesRepository.findOne({ _id: id });
   }
 
-  async create(payload: any): Promise<Message> {
+  async create(payload: object): Promise<Message> {
     const data = {
       ...payload,
       created_at: new Date,

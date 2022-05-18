@@ -10,6 +10,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 import { User } from './models/users/entities/user.entity';
 import { Message } from './models/messages/entities/message.entity';
 import { ProfileModule } from './models/profile/profile.module';
+import { SeedersModule } from './database/seeders/seeders.module';
 
 import appConfig from './config/app';
 import databaseConfig from './config/database';
@@ -45,7 +46,8 @@ import databaseConfig from './config/database';
     AuthModule,
     UsersModule,
     MessagesModule,
-    ProfileModule
+    ProfileModule,
+    SeedersModule
   ],
   providers: [
     {
