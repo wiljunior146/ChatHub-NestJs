@@ -19,6 +19,7 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { InjectUserToBody } from 'src/common/decorators/inject.user.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
+import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
 import * as bcrypt from 'bcrypt';
 
 @Controller('profile')
@@ -52,9 +53,8 @@ export class ProfileController {
     @Body() updateProfile: UpdatePasswordDto,
     @Request() req
   ) {
-    const saltOrRounds = 10;
     const user = await this.usersService.update(req.user.id, {
-      password: await bcrypt.hash(updateProfile.password, saltOrRounds)
+      password: await bcrypt.hash(updateProfile.password, SALT_OR_ROUNDS)
     });
 
     return 'success';

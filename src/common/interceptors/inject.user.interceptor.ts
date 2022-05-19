@@ -12,7 +12,7 @@ import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
  * 
  * @see https://github.com/AvantaR/nestjs-validation-tips
  *
- * @note The value of the user's Id changed when passing it to custom class validator.
+ * @note The value of the user's Id changed when passing it to the custom class validator.
  * So the Id must be parsed to string and parse it to ObjectId on the custom class validator
  * to be able to use it again to match on the database.
  * 

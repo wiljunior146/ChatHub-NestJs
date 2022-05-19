@@ -5,25 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/models/users/entities/user.entity';
 import { Message } from 'src/models/messages/entities/message.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { Seeder } from './seeder';
 
-import appConfig from 'src/config/app';
 import databaseConfig from 'src/config/database';
 
 @Module({
   imports: [
     UsersSeederModule,
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig]
-    }),
-    ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        ttl: config.get<number>('app.rateLimiting.ttl'),
-        limit: config.get<number>('app.rateLimiting.limit')
-      })
+      load: [databaseConfig]
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

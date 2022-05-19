@@ -9,6 +9,7 @@ export class Seeder {
   ) {}
 
   async seed() {
-    await this.usersSeederService.handle();
+    await this.usersSeederService.admin();
+    await this.usersSeederService.users(30);
   }
 }

@@ -4,6 +4,7 @@ export default registerAs('app', () => ({
   name: process.env.APP_NAME || 'NestJs',
   port: parseInt(process.env.APP_PORT, 10) || 3000,
   secretKey: process.env.APP_SECRET_KEY,
+  password: process.env.APP_PASSWORD || 'password',
   rateLimiting: {
   	ttl: parseInt(process.env.APP_RATE_LIMITING_TTL) || 60,
   	limit: parseInt(process.env.APP_RATE_LIMITING_LIMIT) || 10,
