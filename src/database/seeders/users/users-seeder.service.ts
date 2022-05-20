@@ -21,9 +21,22 @@ export class UsersSeederService {
   ) {}
 
   /**
+   * Truncate or remove all data from users collection.
+   *
+   * @return {void}
+   */
+  async clear () {
+    Logger.warn('Clearing users collection.');
+
+    await this.usersRepository.clear();
+
+    Logger.log('Done clearing users collection.');
+  }
+
+  /**
    * Create admin.
    * 
-   * @return void
+   * @return {void}
    */
   async admin () {
     Logger.warn('Seeding admin.');
@@ -44,7 +57,7 @@ export class UsersSeederService {
    * Create number of users base on count parameter.
    * 
    * @param  {number = 1}  count
-   * @return void
+   * @return {void}
    */
   async users(count: number = 1) {
     Logger.warn('Seeding users.');
@@ -65,7 +78,9 @@ export class UsersSeederService {
         username: faker.unique(faker.internet.userName, [firstName, lastName]),
         email: faker.unique(faker.internet.email, [firstName, lastName]),
         password: password,
-        role: Role.User
+        role: Role.User,
+        created_at: new Date(),
+        udpated_at: new Date()
       });
     }
 

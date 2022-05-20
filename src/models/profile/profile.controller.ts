@@ -20,6 +20,7 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { InjectUserToBody } from 'src/common/decorators/inject.user.decorator';
 import { TransformInterceptor } from 'src/common/interceptors/transform.interceptor';
 import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
+import { UserResource } from 'src/models/users/resources/user.resource';
 import * as bcrypt from 'bcrypt';
 
 @Controller('profile')
@@ -29,8 +30,8 @@ export class ProfileController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor, TransformInterceptor)
-  getProfile(@Request() req): User {
-    return new User(req.user);
+  getProfile(@Request() req): UserResource {
+    return new UserResource(req.user);
   }
 
   @Post('update')
@@ -41,9 +42,9 @@ export class ProfileController {
   async updateProfile(
     @Body() updateProfile: UpdateProfileDto,
     @Request() req
-  ): Promise<User> {
+  ): Promise<UserResource> {
     const user = await this.usersService.update(req.user.id, updateProfile);
-    return new User(user);
+    return new UserResource(user);
   }
 
   @Put('update/password')

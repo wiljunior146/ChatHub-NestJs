@@ -19,9 +19,8 @@ export class UserUniqueExceptCurrentUserRule implements ValidatorConstraintInter
    * Validate if the property is unique except for the current user.current
    *
    * @note   To get the user object the user object must be injected from the controller.
-   * @see    "src/common/interceptors/inject.user.interceptor" to determine what decorator
-   * need to be used on the controller.
-   * 
+   * @see    src/common/interceptors/inject.user.interceptor to determine what decorator
+   *         need to be used on the controller.
    * @param  {string}  value
    * @param  {any}     validationArguments
    * @return {boolean}

@@ -10,14 +10,14 @@ import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
 /**
  * Injecting request object to a custom validation class.
  * 
- * @see https://github.com/AvantaR/nestjs-validation-tips
+ * @see  https://github.com/AvantaR/nestjs-validation-tips
  *
  * @note The value of the user's Id changed when passing it to the custom class validator.
- * So the Id must be parsed to string and parse it to ObjectId on the custom class validator
- * to be able to use it again to match on the database.
+ *       So the Id must be parsed to string and parse it to ObjectId on the custom class validator
+ *       to be able to use it again to match on the database.
  * 
- * This might happen on mongodb only since it only happens
- * if the property is an instance of ObjectId.
+ *       This might happen on mongodb only since it only happens
+ *       if the property is an instance of ObjectId.
  *
  * @class
  */

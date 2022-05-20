@@ -13,13 +13,16 @@ async function bootstrap() {
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.use(helmet());
+
   app.enableCors({
 	  'origin': '*',
 	  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
 	  'preflightContinue': false,
 	  'optionsSuccessStatus': HttpStatus.NO_CONTENT
 	});
+
   app.setGlobalPrefix('api');
+
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     exceptionFactory: (validationErrors: ValidationError[] = []) => {

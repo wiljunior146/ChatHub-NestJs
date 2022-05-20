@@ -15,6 +15,7 @@ import { RegisterDto } from './dto/register.dto';
 import { User } from 'src/models/users/entities/user.entity';
 import { Role } from 'src/common/enums/role.enum';
 import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
+import { UserResource } from 'src/models/users/resources/user.resource';
 import * as bcrypt from 'bcrypt';
 
 @Controller('auth')
@@ -32,7 +33,7 @@ export class AuthController {
 
   @Post('register')
   @UseInterceptors(ClassSerializerInterceptor)
-  async register(@Body() registerDto: RegisterDto): Promise<User> {
+  async register(@Body() registerDto: RegisterDto): Promise<UserResource> {
     const { password, ...data } = registerDto;
     const payload = {
       ...data,
@@ -40,6 +41,6 @@ export class AuthController {
       password: await bcrypt.hash(password, SALT_OR_ROUNDS)
     };
     const user = await this.usersService.create(payload);
-    return new User(user);
+    return new UserResource(user);
   }
 }

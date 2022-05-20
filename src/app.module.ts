@@ -11,6 +11,8 @@ import { User } from './models/users/entities/user.entity';
 import { Message } from './models/messages/entities/message.entity';
 import { ProfileModule } from './models/profile/profile.module';
 import { SeedersModule } from './database/seeders/seeders.module';
+import { Service } from './models/contacts/.service';
+import { Module } from './models/contacts/.module';
 
 import appConfig from './config/app';
 import databaseConfig from './config/database';
@@ -47,13 +49,14 @@ import databaseConfig from './config/database';
     UsersModule,
     MessagesModule,
     ProfileModule,
-    SeedersModule
+    Module
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard
-    }
+    },
+    Service
   ]
 })
 

@@ -8,8 +8,22 @@ export class Seeder {
     private readonly usersSeederService: UsersSeederService,
   ) {}
 
+  /**
+   * Seed or insert data to collections.
+   *
+   * @return {void}
+   */
   async seed() {
     await this.usersSeederService.admin();
-    await this.usersSeederService.users(30);
+    await this.usersSeederService.users(50);
+  }
+
+  /**
+   * Truncate or remove all data from collections.
+   *
+   * @return {void}
+   */
+  async clear() {
+    await this.usersSeederService.clear();
   }
 }

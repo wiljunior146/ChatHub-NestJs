@@ -32,7 +32,7 @@ export function InjectUserToParam() {
 /**
  * Injecting request object to a specified context to be able to use on custom class validator.
  *
- * @see https://github.com/AvantaR/nestjs-validation-tips
+ * @see    https://github.com/AvantaR/nestjs-validation-tips
  *
  * @param  {'query' | 'body' | 'params'}  context
  * @return {void}
