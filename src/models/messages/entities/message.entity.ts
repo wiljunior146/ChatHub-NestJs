@@ -7,8 +7,9 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 import { MessageInterface } from '../interfaces/message.interface';
-import { Exclude, Transform } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { User } from 'src/models/users/entities/user.entity';
+import { Contact } from "src/models/contacts/entities/contact.entity";
 
 @Entity({ name: 'messages' })
 export class Message implements MessageInterface {
@@ -25,11 +26,11 @@ export class Message implements MessageInterface {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.sent_messages)
+  @ManyToOne(() => User, (user) => user.messages)
   sender: User
 
-  @ManyToOne(() => User, (user) => user.recieved_messages)
-  receiver: User
+  @ManyToOne(() => Contact, (contact) => contact.messages)
+  contact: Contact
 
   constructor(partial: Partial<Message>) {
     Object.assign(this, partial);

@@ -9,18 +9,17 @@ import { Seeder } from 'src/database/seeders/seeder';
  * @see https://medium.com/the-crowdlinker-chronicle/seeding-databases-using-nestjs-cd6634e8efc5
  */
 async function bootstrap() {
-  NestFactory.createApplicationContext(SeedersModule)
-    .then(async (appContext) => {
-      const seeder = appContext.get(Seeder);
+  const app = await NestFactory.createApplicationContext(SeedersModule);
 
-      await seeder.clear();
-      await seeder.seed();
-
-      appContext.close();
-    })
-    .catch(error => {
-      throw error;
-    });
+  try {
+    const seeder = app.get(Seeder);
+    await seeder.clear();
+    await seeder.seed();
+  } catch (error) {
+    throw error;
+  } finally {
+    app.close();
+  }
 }
 
 bootstrap();

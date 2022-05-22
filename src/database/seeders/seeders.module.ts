@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Seeder } from './seeder';
 
 import databaseConfig from 'src/config/database';
+import { Contact } from 'src/models/contacts/entities/contact.entity';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import databaseConfig from 'src/config/database';
         url: config.get<string>('database.connection'),
         entities: [
           User,
+          Contact,
           Message
         ],
         synchronize: true,
