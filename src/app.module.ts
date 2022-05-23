@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { MessagesModule } from './models/messages/messages.module';
-import { AuthModule } from './authentication/auth.module';
-import { UsersModule } from './models/users/users.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerGuard } from '@nestjs/throttler';
-import { User } from './models/users/entities/user.entity';
-import { Message } from './models/messages/entities/message.entity';
-import { ProfileModule } from './models/profile/profile.module';
-import { ContactsModule } from './models/contacts/contacts.module';
-import { Contact } from './models/contacts/entities/contact.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ProfileModule } from './app/http/profile/profile.module';
+import { AuthModule } from './app/http/authentication/auth.module';
+import { UsersModule } from './app/http/users/users.module';
+import { User } from './app/models/user.entity';
+import { ContactsModule } from './app/http/contacts/contacts.module';
+import { MessagesModule } from './app/http/messages/messages.module';
+import { Message } from './app/models/message.entity';
+import { Contact } from './app/models/contact.entity';
 
 import appConfig from './config/app';
 import databaseConfig from './config/database';

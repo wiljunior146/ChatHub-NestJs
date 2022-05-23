@@ -1,11 +1,16 @@
 import { omit } from 'lodash';
-import helmet from 'helmet';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { useContainer } from 'class-validator';
-import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
-import { ValidationPipe, ValidationError, BadRequestException, HttpStatus } from '@nestjs/common';
+import {
+  ValidationPipe,
+  ValidationError,
+  BadRequestException,
+  HttpStatus
+} from '@nestjs/common';
+
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -1,16 +1,15 @@
 import { MongoRepository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/models/users/entities/user.entity';
-import { Role } from 'src/common/enums/role.enum';
+import { User } from 'src/app/models/user.entity';
+import { Role } from 'src/app/common/enums/role.enum';
 import { faker } from '@faker-js/faker';
 import { ConfigService } from '@nestjs/config';
-import { ObjectId } from 'mongodb';
-import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
 import { Logger } from '@nestjs/common';
+import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
 
 import * as bcrypt from 'bcrypt';
-import appConfig from 'src/config/app';
+import { roleText } from 'src/app/models/getters/user.getter';
 
 @Injectable()
 export class UsersSeederService {
@@ -39,7 +38,7 @@ export class UsersSeederService {
    * @return {void}
    */
   async admin () {
-    Logger.warn('Seeding admin.');
+    Logger.warn('Seeding Admin.');
 
     await this.usersRepository.save({
       first_name: 'wilson',
@@ -50,17 +49,19 @@ export class UsersSeederService {
       role: Role.Admin
     });
 
-    Logger.log('Done seeding admin.');
+    Logger.log('Done seeding Admin.');
   }
 
   /**
    * Create number of users base on count parameter.
    * 
+   * @param  {Role}  role
    * @param  {number = 1}  count
    * @return {void}
    */
-  async users(count: number = 1) {
-    Logger.warn('Seeding users.');
+  async users(role: Role, count: number = 1) {
+    const specifiedRole: string = roleText({ value: role });
+    Logger.warn(`Seeding ${specifiedRole}s.`);
 
     let users: object[] = [];
 
@@ -78,14 +79,14 @@ export class UsersSeederService {
         username: faker.unique(faker.internet.userName, [firstName, lastName]),
         email: faker.unique(faker.internet.email, [firstName, lastName]),
         password: password,
-        role: Role.User,
+        role: role,
         created_at: new Date(),
-        udpated_at: new Date()
+        updated_at: new Date()
       });
     }
 
     await this.usersRepository.insertMany(users);
 
-    Logger.log('Done seeding users.');
+    Logger.log(`Done seeding ${specifiedRole}s.`);
   }
 }
