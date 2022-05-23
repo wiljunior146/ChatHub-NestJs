@@ -19,7 +19,7 @@ export class UsersService {
       where: {
         role: payload.role ? payload.role : { $ne: Role.Admin },
       },
-      skip: skip,
+      skip,
       take
     });
 
