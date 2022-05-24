@@ -33,6 +33,7 @@ import databaseConfig from './config/database';
       inject: [ConfigService],
 		  useFactory: (config: ConfigService) => ({
         type: 'mongodb',
+        database: config.get<string>('database.database'),
         url: config.get<string>('database.connection'),
         entities: [
           User,

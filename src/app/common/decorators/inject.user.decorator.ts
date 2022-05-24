@@ -1,6 +1,7 @@
-import { applyDecorators, UseInterceptors, UsePipes } from '@nestjs/common';
+import { applyDecorators, Req, UseInterceptors, UsePipes } from '@nestjs/common';
 import { InjectUserInterceptor } from 'src/app/common/interceptors/inject.user.interceptor';
 import { StripRequestContextPipe } from 'src/app/common/pipes/strip.request.context.pipe';
+import { Request } from 'src/app/common/enums/request.enum';
 
 /**
  * This will inject current user object to dto that uses @Query decorator.
@@ -8,7 +9,7 @@ import { StripRequestContextPipe } from 'src/app/common/pipes/strip.request.cont
  * @return {void}
  */
 export function InjectUserToQuery() {
-  return applyDecorators(InjectUserTo('query'));
+  return applyDecorators(InjectUserTo(Request.Query));
 }
 
 /**
@@ -17,7 +18,7 @@ export function InjectUserToQuery() {
  * @return {void}
  */
 export function InjectUserToBody() {
-  return applyDecorators(InjectUserTo('body'));
+  return applyDecorators(InjectUserTo(Request.Body));
 }
 
 /**
@@ -26,19 +27,19 @@ export function InjectUserToBody() {
  * @return {void}
  */
 export function InjectUserToParam() {
-  return applyDecorators(InjectUserTo('params'));
+  return applyDecorators(InjectUserTo(Request.Params));
 }
 
 /**
- * Injecting request object to a specified context to be able to use on custom class validator.
+ * Injecting current user object to a specified context to be able to use on custom class validator.
  *
  * @see    https://github.com/AvantaR/nestjs-validation-tips
- * @param  {'query' | 'body' | 'params'}  context
+ * @param  {Request.Query | Request.Body | Request.Params}  context
  * @return {void}
  */
-export function InjectUserTo(context: 'query' | 'body' | 'params') {
+export function InjectUserTo(context: Request.Query | Request.Body | Request.Params) {
   return applyDecorators(
     UseInterceptors(new InjectUserInterceptor(context)),
-    UsePipes(StripRequestContextPipe),
+    UsePipes(StripRequestContextPipe)
   );
 }

@@ -16,7 +16,6 @@ import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { InjectUserToBody } from 'src/app/common/decorators/inject.user.decorator';
-import { TransformInterceptor } from 'src/app/common/interceptors/transform.interceptor';
 import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
 import { UserResource } from './resources/user.resource';
 import * as bcrypt from 'bcrypt';
@@ -47,7 +46,6 @@ export class ProfileController {
 
   @Put('update/password')
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(TransformInterceptor)
   async updatePassword(
     @Body() updateProfile: UpdatePasswordDto,
     @Request() req

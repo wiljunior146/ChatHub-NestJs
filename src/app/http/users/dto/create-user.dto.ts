@@ -1,4 +1,5 @@
-import { IsString, Length, IsEmail } from 'class-validator';
+import { IsString, Length, IsEmail, IsIn } from 'class-validator';
+import { UserUnique } from 'src/app/common/decorators/validations/user-unique.decorator';
 
 export class CreateUserDto {
   @IsString()
@@ -16,9 +17,6 @@ export class CreateUserDto {
   @IsString()
   @IsEmail()
   @Length(1, 255)
+  @UserUnique()
   email: string;
-
-  @IsString()
-  @Length(1, 255)
-  password: string;
 }

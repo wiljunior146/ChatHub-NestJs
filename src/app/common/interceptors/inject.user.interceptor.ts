@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { REQUEST_CONTEXT } from 'src/app/common/constants/request.constant';
+import { Request } from 'src/app/common/enums/request.enum';
 
 /**
  * Injecting request object to a custom validation class.
@@ -20,7 +21,7 @@ import { REQUEST_CONTEXT } from 'src/app/common/constants/request.constant';
  */
 @Injectable()
 export class InjectUserInterceptor implements NestInterceptor {
-  constructor(private type?: NonNullable<'query' | 'body' | 'params'>) {}
+  constructor(private type?: NonNullable<Request.Query | Request.Body | Request.Params>) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();

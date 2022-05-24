@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { User } from 'src/app/models/user.entity';
-import { Paginate } from './interfaces/paginate.interface';
+import { PaginateUserInterface } from './interfaces/paginate.interface';
 import { Role } from 'src/app/common/enums/role.enum';
+import { CreateUserInterface } from './interfaces/create.interface';
+import { UpdateUserInterface } from './interfaces/update.interface';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +15,7 @@ export class UsersService {
     private usersRepository: MongoRepository<User>,
   ) {}
 
-  async paginate(payload: Paginate): Promise<{ data: User[], meta: object }> {
+  async paginate(payload: PaginateUserInterface): Promise<{ data: User[], meta: object }> {
     const take: number = payload.limit;
     const skip: number = (payload.page - 1) * take;
     const [data, total] = await this.usersRepository.findAndCount({
@@ -28,10 +31,6 @@ export class UsersService {
       page: payload.page,
       limit: payload.limit
     }}
-  }
-
-  async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
   }
 
   async findOne(id: string): Promise<User> {
@@ -53,11 +52,11 @@ export class UsersService {
     return await this.usersRepository.count(payload);
   }
 
-  async create(payload: object): Promise<User> {
+  async create(payload: CreateUserInterface): Promise<User> {
     return await this.usersRepository.save(payload);
   }
 
-  async update(id: number, payload: object): Promise<User> {
+  async update(id: string, payload: UpdateUserInterface): Promise<User> {
     const user = await this.usersRepository.findOneOrFail(id);
     return await this.usersRepository.save({
       ...user,

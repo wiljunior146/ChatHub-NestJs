@@ -7,5 +7,12 @@ export default registerAs('database', () => ({
    * @example mongodb://localhost/nest
    * @type    {String}
    */
-  connection: process.env.DB_CONNECTION
+  connection: process.env.DB_CONNECTION,
+
+  /**
+   * Database name.
+   * 
+   * @type {string}
+   */
+  database: process.env.DB_DATABASE
 }));

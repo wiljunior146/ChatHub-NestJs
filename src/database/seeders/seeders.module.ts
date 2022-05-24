@@ -21,6 +21,7 @@ import databaseConfig from 'src/config/database';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mongodb',
+        database: config.get<string>('database.database'),
         url: config.get<string>('database.connection'),
         entities: [
           User,
@@ -34,7 +35,7 @@ import databaseConfig from 'src/config/database';
     }),
     TypeOrmModule.forFeature([User])
   ],
-  providers: [UsersSeederService, Seeder],
+  providers: [UsersSeederService, Seeder]
 })
 
 export class SeedersModule {}
