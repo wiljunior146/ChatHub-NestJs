@@ -8,7 +8,8 @@ import {
   Body,
   Post,
   Param,
-  Put
+  Put,
+  Delete
 } from '@nestjs/common';
 import { UsersService } from 'src/app/services/users/users.service';
 import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
@@ -59,10 +60,17 @@ export class UsersController {
   }
 
   @Put(':id')
-  @InjectRequest(Request.Params, Request.Body)
+  @InjectRequest(Request.Params, Request.Body, 'id')
   @UseInterceptors(ClassSerializerInterceptor)
   async update(@Param('id') id: string, @Body() body: UpdateUserDto) {
     const user = await this.usersService.update(id, body);
+    return new UserResource(user);
+  }
+
+  @Delete(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async destroy(@Param('id') id: string) {
+    const user = await this.usersService.delete(id);
     return new UserResource(user);
   }
 }

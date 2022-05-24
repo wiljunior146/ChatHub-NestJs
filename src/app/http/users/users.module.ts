@@ -4,7 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../../models/user.entity';
 import { UsersController } from './users.controller';
 import { ConfigModule } from '@nestjs/config';
-import { UserUniqueExceptPassedUserRule } from 'src/app/common/validations/users/user-unique-except-passed-user.validator';
+import {
+  UserUniqueWithIgnoreRule
+} from 'src/app/common/validations/users/user-unique-with-ignore.validator';
 
 import appConfig from 'src/config/app';
 
@@ -15,7 +17,7 @@ import appConfig from 'src/config/app';
       load: [appConfig]
     })
   ],
-  providers: [UsersService, UserUniqueExceptPassedUserRule],
+  providers: [UsersService, UserUniqueWithIgnoreRule],
   exports: [UsersService],
   controllers: [UsersController],
 })

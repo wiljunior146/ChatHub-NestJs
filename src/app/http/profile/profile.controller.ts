@@ -1,13 +1,10 @@
 import {
   Controller,
   Request,
-  HttpStatus,
   Get,
-  Post,
   Put,
   UseGuards,
   Body,
-  HttpCode,
   UseInterceptors,
   ClassSerializerInterceptor
 } from '@nestjs/common';
@@ -31,8 +28,7 @@ export class ProfileController {
     return new UserResource(req.user);
   }
 
-  @Post('update')
-  @HttpCode(HttpStatus.OK)
+  @Put()
   @UseGuards(JwtAuthGuard)
   @InjectUserToBody()
   @UseInterceptors(ClassSerializerInterceptor)
@@ -44,7 +40,7 @@ export class ProfileController {
     return new UserResource(user);
   }
 
-  @Put('update/password')
+  @Put('password')
   @UseGuards(JwtAuthGuard)
   async updatePassword(
     @Body() updateProfile: UpdatePasswordDto,
