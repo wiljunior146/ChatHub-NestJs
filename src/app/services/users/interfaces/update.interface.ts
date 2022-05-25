@@ -1,8 +1,6 @@
-import { Role } from "src/app/common/enums/role.enum";
-
 export interface UpdateUserInterface {
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
   username?: string;
   email?: string;
   password?: string;

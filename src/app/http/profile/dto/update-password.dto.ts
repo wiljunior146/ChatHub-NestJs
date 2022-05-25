@@ -9,5 +9,5 @@ export class UpdatePasswordDto {
   @IsString()
   @Length(1, 255)
   @Match('password')
-  password_confirmation: string;
+  passwordConfirmation: string;
 }

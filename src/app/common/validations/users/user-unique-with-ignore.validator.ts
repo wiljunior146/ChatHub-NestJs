@@ -14,10 +14,9 @@ export class UserUniqueWithIgnoreRule implements ValidatorConstraintInterface {
   constructor(private usersService: UsersService) {}
 
   /**
-   * Validate if the property is unique except for the current user.
+   * Validate if the property is unique except for the passed User ID.
    *
-   * @note   To get the user object the user object must be injected from the controller
-   *         using interceptors.
+   * @note   The REQUEST_CONTEXT property must contain the User ID.
    * @param  {string}  value
    * @param  {any}     validationArguments
    * @return {boolean}
@@ -30,13 +29,12 @@ export class UserUniqueWithIgnoreRule implements ValidatorConstraintInterface {
       [validationArguments.property]: value
     };
 
-    const totalFound = await this.usersService.count(payload);
+    const total = await this.usersService.count(payload);
 
-    return !totalFound;
+    return !total;
   }
 
   defaultMessage(args: ValidationArguments): string {
     return args.property + ' already existed';
   }
 }
-  

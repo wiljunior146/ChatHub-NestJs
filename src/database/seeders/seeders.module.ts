@@ -33,7 +33,7 @@ import databaseConfig from 'src/config/database';
         logging: true
       })
     }),
-    TypeOrmModule.forFeature([User])
+    TypeOrmModule.forFeature([User, Contact])
   ],
   providers: [UsersSeederService, Seeder]
 })

@@ -9,11 +9,12 @@ import {
 import { MessageInterface } from './interfaces/message.interface';
 import { User } from 'src/app/models/user.entity';
 import { Contact } from "src/app/models/contact.entity";
+import { ObjectId } from 'mongodb';
 
 @Entity({ name: 'messages' })
 export class Message implements MessageInterface {
   @ObjectIdColumn()
-  _id: string;
+  _id: ObjectId;
 
   @Column()
   content: string;
@@ -25,8 +26,8 @@ export class Message implements MessageInterface {
   contact: Contact
 
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 }

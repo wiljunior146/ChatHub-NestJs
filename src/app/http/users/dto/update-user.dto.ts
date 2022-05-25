@@ -6,25 +6,27 @@ import {
 } from 'class-validator';
 import {
   UserUniqueWithIgnore
-} from 'src/app/common/decorators/validations/user-unique-with-ignore.decorator';
+} from 'src/app/common/decorators/validations/users/user-unique-with-ignore.decorator';
 import { REQUEST_CONTEXT } from 'src/app/common/constants/request.constant';
 
 export class UpdateUserDto {
   @IsString()
   @Length(1, 255)
-  first_name: string;
+  firstName: string;
 
 	@IsString()
   @Length(1, 255)
-  last_name: string;
+  lastName: string;
 
   @IsString()
   @Length(1, 255)
+  @UserUniqueWithIgnore()
   username: string;
 
   @IsString()
   @IsEmail()
   @Length(1, 255)
+  @UserUniqueWithIgnore()
   email: string;
 
   /**

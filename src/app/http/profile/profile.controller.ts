@@ -24,7 +24,7 @@ export class ProfileController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  getProfile(@Request() req): UserResource {
+  index(@Request() req): UserResource {
     return new UserResource(req.user);
   }
 
@@ -32,7 +32,7 @@ export class ProfileController {
   @UseGuards(JwtAuthGuard)
   @InjectUserToBody()
   @UseInterceptors(ClassSerializerInterceptor)
-  async updateProfile(
+  async update(
     @Body() updateProfile: UpdateProfileDto,
     @Request() req
   ): Promise<UserResource> {

@@ -10,17 +10,18 @@ import { Role } from 'src/app/common/enums/role.enum';
 import { Message } from 'src/app/models/message.entity';
 import { Contact } from 'src/app/models/contact.entity';
 import { UserInterface } from './interfaces/user.interface';
+import { ObjectId } from 'mongodb';
 
 @Entity({ name: 'users' })
 export class User implements UserInterface {
   @ObjectIdColumn()
-  _id: string;
+  _id: ObjectId;
 
   @Column()
-  first_name: string;
+  firstName: string;
 
   @Column()
-  last_name: string;
+  lastName: string;
 
   @Column({ unique: true })
   username: string;
@@ -44,8 +45,8 @@ export class User implements UserInterface {
   contactables: Contact[];
 
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 }

@@ -59,6 +59,13 @@ export class UsersController {
     return new UserResource(user);
   }
 
+  @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async show(@Param('id') id: string) {
+    const user = await this.usersService.findOne(id);
+    return new UserResource(user);
+  }
+
   @Put(':id')
   @InjectRequest(Request.Params, Request.Body, 'id')
   @UseInterceptors(ClassSerializerInterceptor)

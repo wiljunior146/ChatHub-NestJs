@@ -1,14 +1,14 @@
 import { IsString, Length } from 'class-validator';
-import { UserUnique } from 'src/app/common/decorators/validations/user-unique.decorator';
+import { UserUnique } from 'src/app/common/decorators/validations/users/user-unique.decorator';
 
 export class RegisterDto {
   @IsString()
   @Length(1, 255)
-  first_name: string;
+  firstName: string;
 
   @IsString()
   @Length(1, 255)
-  last_name: string;
+  lastName: string;
 
   @IsString()
   @Length(1, 255)

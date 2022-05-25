@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Role } from 'src/app/common/enums/role.enum';
 import { UsersSeederService } from './users/users-seeder.service';
 
 @Injectable()
@@ -15,8 +14,7 @@ export class Seeder {
    */
   async seed() {
     await this.usersSeederService.admin();
-    await this.usersSeederService.users(Role.Staff, 50);
-    await this.usersSeederService.users(Role.User, 50);
+    await this.usersSeederService.userWithContacts(5);
   }
 
   /**

@@ -22,9 +22,10 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# ChatHub
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Description
+A simple chatting system.
 
 ## Installation
 
@@ -32,30 +33,46 @@
 $ npm install
 ```
 
+Create .env file or run
+```bash
+$ cp .env.example .env
+```
+
+Update .env values.
+
+## Seeding data
+
+```bash
+# we are using mongodb as our database so it will
+# automatically create the database and collections.
+
+$ yarn run seed
+```
+
 ## Running the app
 
 ```bash
 # development
-$ npm run start
+$ yarn run start
 
 # watch mode
-$ npm run start:dev
+$ yarn run start:dev
 
 # production mode
-$ npm run start:prod
+$ yarn run start:prod
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
+$ yarn run test
 
 # e2e tests
-$ npm run test:e2e
+$ yarn run test:e2e
 
 # test coverage
-$ npm run test:cov
+$ yarn run test:cov
 ```
 
 ## Support

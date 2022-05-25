@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository, getMongoManager } from 'typeorm';
+import { MongoRepository } from 'typeorm';
 import { Message } from '../../models/message.entity';
+import { CreateMessageInterface } from './interfaces/create.interface';
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
-    private readonly  messagesRepository: MongoRepository<Message>,
+    private readonly  messagesRepository: MongoRepository<Message>
   ) {}
 
   async findAll() {
@@ -38,16 +39,11 @@ export class MessagesService {
   }
 
   async findOne(id: string): Promise<Message> {
-    return await this.messagesRepository.findOne({ _id: id });
+    return await this.messagesRepository.findOne(id);
   }
 
-  async create(payload: object): Promise<Message> {
-    const data = {
-      ...payload,
-      created_at: new Date,
-      updated_at: new Date
-    };
-    return await this.messagesRepository.save(data);
+  async create(payload: CreateMessageInterface): Promise<Message> {
+    return await this.messagesRepository.save(payload);
   }
 
   async remove(id: string): Promise<Message> {

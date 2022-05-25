@@ -18,6 +18,7 @@ import { Role } from 'src/app/common/enums/role.enum';
 import { Roles } from 'src/app/common/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { ObjectId } from 'mongodb';
+import { MessageResource } from './resources/message.resource';
 
 @Controller('messages')
 export class MessagesController {
@@ -42,11 +43,15 @@ export class MessagesController {
   @Post()
   @Roles(Role.User)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  async create(@Body() createMessageDto: CreateMessageDto, @Request() req, @Res() res) {
-    const { receiver, ...data }: any = createMessageDto;
-    data.receiver = new ObjectId(createMessageDto.receiver);
-    const payload = { ...data, sender: req.user.id };
+  async create(@Body() createMessageDto: CreateMessageDto, @Request() req) {
+    const { contactId, ...data }: any = createMessageDto;
+    const payload = {
+      contactId: new ObjectId(contactId),
+      senderId: req.user.id,
+      ...data
+    };
     const message = await this.messagesService.create(payload);
-    return message;
+
+    return new MessageResource(message);
   }
 }

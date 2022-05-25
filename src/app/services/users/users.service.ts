@@ -2,11 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { User } from 'src/app/models/user.entity';
-import { PaginateUserInterface } from './interfaces/paginate.interface';
+import { PaginateUsersInterface } from './interfaces/paginate.interface';
 import { Role } from 'src/app/common/enums/role.enum';
 import { CreateUserInterface } from './interfaces/create.interface';
 import { UpdateUserInterface } from './interfaces/update.interface';
-import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -15,9 +14,10 @@ export class UsersService {
     private usersRepository: MongoRepository<User>,
   ) {}
 
-  async paginate(payload: PaginateUserInterface): Promise<{ data: User[], meta: object }> {
+  async paginate(payload: PaginateUsersInterface): Promise<{ data: User[], meta: object }> {
     const take: number = payload.limit;
     const skip: number = (payload.page - 1) * take;
+
     const [data, total] = await this.usersRepository.findAndCount({
       where: {
         role: payload.role ? payload.role : { $ne: Role.Admin },
@@ -30,11 +30,11 @@ export class UsersService {
       total: total,
       page: payload.page,
       limit: payload.limit
-    }}
+    }};
   }
 
   async findOne(id: string): Promise<User> {
-    return await this.usersRepository.findOne(id);
+    return await this.usersRepository.findOneOrFail(id);
   }
 
   async findOneByUsernameOrEmail(usernameOrEmail: string): Promise<User> {

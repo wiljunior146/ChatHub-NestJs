@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 
 import helmet from 'helmet';
+import { AllExceptionFilter } from './app/common/filters/all-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,8 @@ async function bootstrap() {
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.use(helmet());
+  app.setGlobalPrefix('api');
+  app.useGlobalFilters(new AllExceptionFilter());
 
   app.enableCors({
 	  'origin': '*',
@@ -25,8 +28,6 @@ async function bootstrap() {
 	  'preflightContinue': false,
 	  'optionsSuccessStatus': HttpStatus.NO_CONTENT
 	});
-
-  app.setGlobalPrefix('api');
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,

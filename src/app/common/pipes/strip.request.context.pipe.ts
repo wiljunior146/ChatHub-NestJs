@@ -17,8 +17,8 @@ export class StripRequestContextPipe implements PipeTransform {
    * Transform incoming request.
    * 
    * @note   This will only stripe the REQUEST_CONTEXT property if
-   *         the request is an object since in the controller we
-   *         can also pass a property name on @Param decorator
+   *         the request is the whole request object since in the controller we
+   *         can also pass a property name like on @Param decorator
    *         to get a specific property so there will be no need to stripe the request.
    *         IE: @Param('id')
    * @param  {any}     value

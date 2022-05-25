@@ -6,5 +6,5 @@ export class CreateMessageDto {
   content: string;
 
   @IsString()
-  receiver: string
+  contactId: string
 }

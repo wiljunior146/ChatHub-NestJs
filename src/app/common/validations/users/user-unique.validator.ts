@@ -14,9 +14,9 @@ export class UserUniqueRule implements ValidatorConstraintInterface {
   async validate(value: string, validationArguments: any): Promise<boolean> {
     const payload: object = { [validationArguments.property]: value };
 
-    const totalFound = await this.usersService.count(payload);
+    const total = await this.usersService.count(payload);
 
-    return !totalFound;
+    return !total;
   }
 
   defaultMessage(args: ValidationArguments): string {

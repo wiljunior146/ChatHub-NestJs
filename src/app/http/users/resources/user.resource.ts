@@ -5,19 +5,23 @@ import { Message } from 'src/app/models/message.entity';
 import { UserInterface } from 'src/app/models/interfaces/user.interface';
 import { Contact } from 'src/app/models/contact.entity';
 import { roleText } from 'src/app/models/getters/user.getter';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UserResource implements UserInterface {
+  @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
-  _id: string;
+  _id: ObjectId;
 
-  first_name: string;
+  @Expose({ name: 'first_name' })
+  firstName: string;
 
-  last_name: string;
+  @Expose({ name: 'last_name' })
+  lastName: string;
 
-  @Expose()
-  get full_name(): string {
-    return `${this.first_name} ${this.last_name}`;
+  @Expose({ name: 'full_name' })
+  get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
   }
 
   username: string;
@@ -30,9 +34,11 @@ export class UserResource implements UserInterface {
   @Transform(roleText)
   role: Role;
 
-  created_at: Date;
+  @Expose({ name: 'created_at' })
+  createdAt: Date;
 
-  updated_at: Date;
+  @Expose({ name: 'updated_at' })
+  updatedAt: Date;
 
   messages: Message[];
 
