@@ -19,11 +19,14 @@ export class Message implements MessageInterface {
   @Column()
   content: string;
 
+  @Column()
+  senderId: ObjectId;
+
   @ManyToOne(() => User, (user) => user.messages)
   sender: User
 
-  @ManyToOne(() => Contact, (contact) => contact.messages)
-  contact: Contact
+  @Column()
+  roomId: ObjectId;
 
   @CreateDateColumn()
   createdAt: Date;

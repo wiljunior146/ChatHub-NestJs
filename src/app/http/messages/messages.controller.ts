@@ -7,7 +7,9 @@ import {
   Body,
   Param,
   Query,
-  UseGuards
+  UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor
  } from '@nestjs/common';
 import { MessagesService } from '../../services/messages/messages.service';
 import { GetMessageDto } from './dto/get-message.dto';
@@ -19,35 +21,42 @@ import { Roles } from 'src/app/common/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { ObjectId } from 'mongodb';
 import { MessageResource } from './resources/message.resource';
+import { InjectUserToQuery } from 'src/app/common/decorators/inject.user.decorator';
 
+@Roles(Role.User)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('messages')
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Get()
-  @Roles(Role.User)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  async findAll(@Query() getMessageDto: GetMessageDto) {
-    const messages = await this.messagesService.findAll();
-    return messages;
+  @InjectUserToQuery()
+  @UseInterceptors(ClassSerializerInterceptor)
+  async index(@Query() query: GetMessageDto) {
+    const { roomId, ...payload } = query;
+    const { data, meta} = await this.messagesService.paginate({
+      ...payload,
+      roomId: new ObjectId(roomId)
+    });
+
+    return {
+      data: data.map((message) => new MessageResource(message)),
+      meta
+    };
   }
 
   @Get(':id')
-  @Roles(Role.User)
-  @UseGuards(JwtAuthGuard, RolesGuard)
   async findOne(@Param('id') id) {
     const message = this.messagesService.findOne(id);
     return message;
   }
 
   @Post()
-  @Roles(Role.User)
-  @UseGuards(JwtAuthGuard, RolesGuard)
   async create(@Body() createMessageDto: CreateMessageDto, @Request() req) {
-    const { contactId, ...data }: any = createMessageDto;
+    const { roomId, ...data }: any = createMessageDto;
     const payload = {
-      contactId: new ObjectId(contactId),
-      senderId: req.user.id,
+      roomId: new ObjectId(roomId),
+      senderId: req.user._id,
       ...data
     };
     const message = await this.messagesService.create(payload);

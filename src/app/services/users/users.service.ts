@@ -48,7 +48,7 @@ export class UsersService {
     });
   }
 
-  async count (payload: object): Promise<number> {
+  async count(payload: object): Promise<number> {
     return await this.usersRepository.count(payload);
   }
 

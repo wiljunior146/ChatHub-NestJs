@@ -1,14 +1,12 @@
 import { User } from "src/app/models/user.entity";
-import { Contact } from "src/app/models/contact.entity";
 import { ObjectId } from "mongodb";
 
 export interface MessageInterface {
-  _id: ObjectId;
-  content: string;
-  senderId?: string;
+  _id?: ObjectId;
+  content?: string;
+  senderId?: ObjectId;
   sender?: User;
-  contact?: Contact;
-  contactId?: string;
+  roomId?: ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }

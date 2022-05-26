@@ -4,7 +4,8 @@ import {
   ManyToOne,
   ObjectIdColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  Column
 } from 'typeorm';
 import { ContactInterface } from './interfaces/contact.interface';
 import { Message } from 'src/app/models/message.entity';
@@ -16,14 +17,20 @@ export class Contact implements ContactInterface {
   @ObjectIdColumn()
   _id: ObjectId;
 
+  @Column()
+  userId?: ObjectId;
+
   @ManyToOne(() => User, (user) => user.contacts)
   user: User;
+
+  @Column()
+  contactableId?: ObjectId;
 
   @ManyToOne(() => User, (user) => user.contactables)
   contactable: User;
 
-  @OneToMany(() => Message, (message) => message.contact)
-  messages: Message[]
+  @Column()
+  roomId: ObjectId;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -7,11 +7,11 @@ import {
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
+import { InjectUserToQuery } from 'src/app/common/decorators/inject.user.decorator';
 import { Roles } from 'src/app/common/decorators/roles.decorator';
 import { Role } from 'src/app/common/enums/role.enum';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/app/common/guards/roles.guard';
-import { Contact } from 'src/app/models/contact.entity';
 import { ContactsService } from 'src/app/services/contacts/contacts.service';
 import { GetContactsDto } from './dto/get-contacts.dto';
 import { ContactResource } from './resources/contact.resource';
@@ -36,7 +36,7 @@ export class ContactsController {
     });
 
     return {
-      data: data.map((contact: Contact) => new ContactResource(contact)),
+      data: data.map((contact) => new ContactResource(contact)),
       meta
     };
   }

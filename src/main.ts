@@ -9,9 +9,10 @@ import {
   BadRequestException,
   HttpStatus
 } from '@nestjs/common';
-
+import {
+  EntityNotFoundExceptionFilter
+} from './app/common/filters/entity-not-found-exception.filter';
 import helmet from 'helmet';
-import { AllExceptionFilter } from './app/common/filters/all-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,7 +21,7 @@ async function bootstrap() {
 
   app.use(helmet());
   app.setGlobalPrefix('api');
-  app.useGlobalFilters(new AllExceptionFilter());
+  app.useGlobalFilters(new EntityNotFoundExceptionFilter());
 
   app.enableCors({
 	  'origin': '*',

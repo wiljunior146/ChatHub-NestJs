@@ -14,7 +14,8 @@ export class Seeder {
    */
   async seed() {
     await this.usersSeederService.admin();
-    await this.usersSeederService.userWithContacts(5);
+    await this.usersSeederService.users(5);
+    await this.usersSeederService.staffs();
   }
 
   /**

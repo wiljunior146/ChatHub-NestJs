@@ -3,39 +3,42 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { Message } from '../../models/message.entity';
 import { CreateMessageInterface } from './interfaces/create.interface';
+import { PaginateMessagesInterface } from './interfaces/paginate.interface';
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
-    private readonly  messagesRepository: MongoRepository<Message>
+    private readonly messagesRepository: MongoRepository<Message>
   ) {}
 
-  async findAll() {
+  async paginate(payload: PaginateMessagesInterface) {
     const messages = await this.messagesRepository
       .aggregate([
+        { $match: { roomId: payload.roomId } },
         {
           $lookup: {
             from: 'users',
-            localField: 'sender',
+            localField: 'senderId',
             foreignField: '_id',
             as: 'sender',
           }
         },
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'receiver',
-            foreignField: '_id',
-            as: 'receiver',
-          }
-        },
-        { $unwind: '$receiver' },
         { $unwind: '$sender' }
       ])
-      .limit(1)
+      .limit(payload.limit)
+      .skip(payload.skip)
       .toArray();
-    return messages;
+    const total = await this.messagesRepository.count({ roomId: payload.roomId });
+
+    return {
+      data: messages,
+      meta: {
+        total,
+        skip: payload.skip,
+        limit: payload.limit
+      }
+    };
   }
 
   async findOne(id: string): Promise<Message> {

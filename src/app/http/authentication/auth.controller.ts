@@ -1,12 +1,12 @@
 import {
   Controller,
   Request,
-  Get,
   Post,
   UseGuards,
   Body,
   UseInterceptors,
-  ClassSerializerInterceptor
+  ClassSerializerInterceptor,
+  Delete
 } from '@nestjs/common';
 import { LocalAuthGuard } from 'src/app/common/guards/local-auth.guard';
 import { AuthService } from './auth.service';
@@ -16,6 +16,7 @@ import { Role } from 'src/app/common/enums/role.enum';
 import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
 import { UserResource } from './resources/user.resource';
 import * as bcrypt from 'bcrypt';
+import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {

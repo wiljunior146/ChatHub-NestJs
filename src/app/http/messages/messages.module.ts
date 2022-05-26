@@ -3,12 +3,17 @@ import { MessagesService } from '../../services/messages/messages.service';
 import { MessagesController } from './messages.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from '../../models/message.entity';
+import { Contact } from 'src/app/models/contact.entity';
+import {
+  UserCanViewContactRoomRule
+} from 'src/app/common/validations/contacts/user-can-view-contact-room.validator';
+import { ContactsService } from 'src/app/services/contacts/contacts.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message])
+    TypeOrmModule.forFeature([Message, Contact])
   ],
   controllers: [MessagesController],
-  providers: [MessagesService]
+  providers: [MessagesService, ContactsService, UserCanViewContactRoomRule]
 })
 export class MessagesModule {}

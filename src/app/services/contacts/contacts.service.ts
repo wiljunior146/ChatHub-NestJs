@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectID } from 'bson';
 import { MongoRepository } from 'typeorm';
 import { Contact } from '../../models/contact.entity';
 import { PaginateContactsInterface } from './interfaces/paginate.interface';
@@ -13,20 +14,42 @@ export class ContactsService {
 
   async paginate(
     payload: PaginateContactsInterface
-  ) : Promise<{ data: Contact[], meta: object }> {
-    const take: number = payload.limit;
-    const skip: number = (payload.page - 1) * take;
+  ): Promise<{ data: Contact[], meta: object }> {
+    const limit: number = payload.limit;
+    const skip: number = (payload.page - 1) * limit;
 
-    const [data, total] = await this.contactsRepository.findAndCount({
-      where: { userId: payload.userId },
-      skip,
-      take
-    });
+    const contacts: Contact[] = await this.contactsRepository.aggregate([
+        { $match: { userId: payload.userId }},
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'contactableId',
+            foreignField: '_id',
+            as: 'contactable',
+          }
+        },
+        { $unwind: '$contactable' }
+      ])
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+    const total: number = await this.contactsRepository.count({ userId: payload.userId });
 
-    return { data, meta: {
-      total: total,
-      page: payload.page,
-      limit: payload.limit
-    }};
+    return {
+      data: contacts,
+      meta: {
+        total,
+        limit,
+        page: payload.page
+      }
+    };
+  }
+
+  async findOne(id: string): Promise<Contact> {
+    return await this.contactsRepository.findOneOrFail(id);
+  }
+
+  async count(payload: object): Promise<number> {
+    return await this.contactsRepository.count(payload);
   }
 }

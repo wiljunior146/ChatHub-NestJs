@@ -5,8 +5,8 @@ export interface ContactInterface {
   _id?: ObjectId;
   user?: User;
   userId?: ObjectId;
-  contactable?: User;
   contactableId?: ObjectId;
+  roomId?: ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
 }
