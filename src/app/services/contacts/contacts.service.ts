@@ -45,7 +45,7 @@ export class ContactsService {
     };
   }
 
-  async findOne(id: string): Promise<Contact> {
+  async findOneOrFail(id: string): Promise<Contact> {
     return await this.contactsRepository.findOneOrFail(id);
   }
 

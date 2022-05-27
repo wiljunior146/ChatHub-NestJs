@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Transform, Expose } from 'class-transformer';
+import { Transform, Expose, Exclude } from 'class-transformer';
 import { ObjectId } from 'mongodb';
 import { MessageInterface } from 'src/app/models/interfaces/message.interface';
 import { User } from 'src/app/models/user.entity';
@@ -13,16 +13,15 @@ export class MessageResource implements MessageInterface {
 
   content: string;
 
-  @Expose({ name: 'sender_id' })
+  @Expose({ name: 'user_id' })
   @Transform(({ value }) => value.toString())
-  senderId: ObjectId;
+  userId: ObjectId;
 
   @Transform(({ value }) => new UserResource(value))
-  sender: User;
+  user: User;
 
-  @Expose({ name: 'contact_id' })
-  @Transform(({ value }) => value.toString())
-  contactId: ObjectId;
+  @Exclude()
+  roomId: ObjectId;
 
   @Expose({ name: 'created_at' })
   createdAt: Date;

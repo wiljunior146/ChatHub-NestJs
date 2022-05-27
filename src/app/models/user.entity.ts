@@ -35,7 +35,7 @@ export class User implements UserInterface {
   @Column()
   role: Role;
 
-  @OneToMany(() => Message, (message) => message.sender)
+  @OneToMany(() => Message, (message) => message.user)
   messages: Message[];
 
   @OneToMany(() => Contact, (contact) => contact.user)

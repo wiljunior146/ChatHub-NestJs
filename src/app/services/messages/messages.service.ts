@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectId } from 'mongodb';
 import { MongoRepository } from 'typeorm';
 import { Message } from '../../models/message.entity';
 import { CreateMessageInterface } from './interfaces/create.interface';
 import { PaginateMessagesInterface } from './interfaces/paginate.interface';
+import { UpdateMessageInterface } from './interfaces/update.interface';
 
 @Injectable()
 export class MessagesService {
@@ -19,12 +21,12 @@ export class MessagesService {
         {
           $lookup: {
             from: 'users',
-            localField: 'senderId',
+            localField: 'userId',
             foreignField: '_id',
-            as: 'sender',
+            as: 'user',
           }
         },
-        { $unwind: '$sender' }
+        { $unwind: '$user' }
       ])
       .limit(payload.limit)
       .skip(payload.skip)
@@ -45,13 +47,22 @@ export class MessagesService {
     return await this.messagesRepository.findOne(id);
   }
 
+  async findOneOrFail(id: string): Promise<Message> {
+    return await this.messagesRepository.findOneOrFail(id);
+  }
+
   async create(payload: CreateMessageInterface): Promise<Message> {
     return await this.messagesRepository.save(payload);
   }
 
-  async remove(id: string): Promise<Message> {
-    const message = this.messagesRepository.findOneOrFail(id);
-    await this.messagesRepository.delete(id);
-    return message;
+  async update(message: Message, payload: UpdateMessageInterface): Promise<Message> {
+    return await this.messagesRepository.save({
+      ...message,
+      ...payload
+    });
+  }
+
+  async delete(message: Message): Promise<void> {
+    await this.messagesRepository.delete(message._id.toString());
   }
 }

@@ -30,7 +30,7 @@ A simple chatting system.
 ## Installation
 
 ```bash
-$ npm install
+$ yarn install
 ```
 
 Create .env file or run
@@ -43,8 +43,8 @@ Update .env values.
 ## Seeding data
 
 ```bash
-# we are using mongodb as our database so it will
-# automatically create the database and collections.
+# we are using mongodb as our database so it will automatically create the
+# database and collections base on our entities and database name on our config.
 
 $ yarn run seed
 ```

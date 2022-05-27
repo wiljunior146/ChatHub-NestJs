@@ -2,12 +2,14 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
+  Param,
   Query,
   Request,
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
-import { InjectUserToQuery } from 'src/app/common/decorators/inject.user.decorator';
 import { Roles } from 'src/app/common/decorators/roles.decorator';
 import { Role } from 'src/app/common/enums/role.enum';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
@@ -39,5 +41,17 @@ export class ContactsController {
       data: data.map((contact) => new ContactResource(contact)),
       meta
     };
+  }
+
+  @Get(':id')
+  @UseInterceptors(ClassSerializerInterceptor)
+  async show(@Param('id') id: string, @Request() req) {
+    const contact = await this.contactsService.findOneOrFail(id);
+
+    if (! contact.userId.equals(req.user._id)) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    return new ContactResource(contact);
   }
 }

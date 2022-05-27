@@ -31,10 +31,10 @@ export class UpdateProfileDto {
 
   /**
    * REQUEST_CONTEXT must be registered on dto as property
-   * with decorator if the whitelist is true.
+   * if the whitelist is true.
    * 
-   * @note If whitelist is true the property without decorator will be
-   *       removed and will cause an error.
+   * @note If whitelist is true the unexpected property
+   *       will be removed and will cause an error.
    * @see  main.ts useGlobalPipes to check if the whitelist is true (false by default).
    * @see  https://github.com/AvantaR/nestjs-validation-tips/issues/1
    */

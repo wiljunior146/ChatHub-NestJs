@@ -20,10 +20,10 @@ export class Message implements MessageInterface {
   content: string;
 
   @Column()
-  senderId: ObjectId;
+  userId: ObjectId;
 
   @ManyToOne(() => User, (user) => user.messages)
-  sender: User
+  user: User
 
   @Column()
   roomId: ObjectId;

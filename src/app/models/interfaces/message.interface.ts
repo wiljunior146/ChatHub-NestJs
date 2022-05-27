@@ -4,8 +4,8 @@ import { ObjectId } from "mongodb";
 export interface MessageInterface {
   _id?: ObjectId;
   content?: string;
-  senderId?: ObjectId;
-  sender?: User;
+  userId?: ObjectId;
+  user?: User;
   roomId?: ObjectId;
   createdAt?: Date;
   updatedAt?: Date;

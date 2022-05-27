@@ -1,17 +1,25 @@
-import { IsDefined, IsString, Length } from 'class-validator';
-import { REQUEST_CONTEXT } from 'src/app/common/constants/request.constant';
+import { IsInt, Max, Min, IsString, IsDefined } from 'class-validator';
+import { Type } from 'class-transformer';
 import {
   UserCanViewContactRoom
 } from 'src/app/common/decorators/validations/contacts/user-can-view-contact-room.decorator';
+import { REQUEST_CONTEXT } from 'src/app/common/constants/request.constant';
 
-export class CreateMessageDto {
-  @IsString()
-  @Length(1, 3000)
-  content: string;
+export class GetMessagesDto {
+	@Type(() => Number)
+  @IsInt()
+  @Min(5)
+  @Max(100)
+  limit: number;
+
+	@Type(() => Number)
+  @IsInt()
+  @Min(0)
+  skip: number;
 
   @IsString()
   @UserCanViewContactRoom()
-  roomId: string
+  roomId: string;
 
   /**
    * REQUEST_CONTEXT must be registered on dto as property

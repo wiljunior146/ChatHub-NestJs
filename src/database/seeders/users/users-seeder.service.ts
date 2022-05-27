@@ -154,7 +154,7 @@ export class UsersSeederService {
       for (let i = 0; i < 5; i++) {
         messages.push({
           content: faker.lorem.text(),
-          senderId: i % 2 == 0 ? user._id : contactable._id,
+          userId: i % 2 == 0 ? user._id : contactable._id,
           roomId,
           createdAt: new Date,
           updatedAt: new Date

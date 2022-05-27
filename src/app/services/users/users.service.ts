@@ -34,6 +34,10 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User> {
+    return await this.usersRepository.findOne(id);
+  }
+
+  async findOneOrFail(id: string): Promise<User> {
     return await this.usersRepository.findOneOrFail(id);
   }
 
