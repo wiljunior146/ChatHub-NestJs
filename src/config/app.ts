@@ -9,6 +9,13 @@ export default registerAs('app', () => ({
   name: process.env.APP_NAME || 'NestJs',
 
   /**
+   * Application Url.
+   * 
+   * @type {String}
+   */
+  url: process.env.APP_URL || 'http://localhost:3000',
+
+  /**
    * Application port.
    *
    * @type {Number}

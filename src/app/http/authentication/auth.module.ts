@@ -11,13 +11,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/app/models/user.entity';
 import { UserUniqueRule } from 'src/app/common/validations/users/user-unique.validator';
-
 import appConfig from 'src/config/app';
 import databaseConfig from 'src/config/database';
+import { MailsModule } from 'src/app/mails/mails.module';
+import { EmailConsumer } from 'src/app/jobs/email.consumer';
+import { BullModule } from '@nestjs/bull';
+import { MailsService } from 'src/app/mails/mails.service';
 
 @Module({
   imports: [
     UsersModule,
+    MailsModule,
     PassportModule,
     TypeOrmModule.forFeature([User]),
     ConfigModule.forRoot({
@@ -33,9 +37,20 @@ import databaseConfig from 'src/config/database';
         }
       })
     }),
+    BullModule.registerQueue({
+      name: 'email'
+    })
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService, LocalStrategy, JwtStrategy, UserUniqueRule],
+  providers: [
+    AuthService,
+    UsersService,
+    LocalStrategy,
+    JwtStrategy,
+    UserUniqueRule,
+    EmailConsumer,
+    MailsService
+  ],
   exports: [AuthService]
 })
 

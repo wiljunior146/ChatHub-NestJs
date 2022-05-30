@@ -22,11 +22,11 @@ export class GetMessagesDto {
   roomId: string;
 
   /**
-   * REQUEST_CONTEXT must be registered on dto as property
-   * if the whitelist is true.
+   * The REQUEST_CONTEXT is the property that will be injected to DTO for custom validation.
    * 
-   * @note If whitelist is true the unexpected property
-   *       will be removed and will cause an error.
+   * @note If whitelist is true the unexpected or not registered property in DTO
+   *       will be removed so it will cause an error on validation if
+   *       the REQUEST_CONTEXT is not present in DTO.
    * @see  main.ts useGlobalPipes to check if the whitelist is true (false by default).
    * @see  https://github.com/AvantaR/nestjs-validation-tips/issues/1
    */

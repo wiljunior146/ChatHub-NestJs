@@ -5,8 +5,7 @@ import {
   UseGuards,
   Body,
   UseInterceptors,
-  ClassSerializerInterceptor,
-  Delete
+  ClassSerializerInterceptor
 } from '@nestjs/common';
 import { LocalAuthGuard } from 'src/app/common/guards/local-auth.guard';
 import { AuthService } from './auth.service';
@@ -16,13 +15,16 @@ import { Role } from 'src/app/common/enums/role.enum';
 import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
 import { UserResource } from './resources/user.resource';
 import * as bcrypt from 'bcrypt';
-import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private usersService: UsersService
+    private usersService: UsersService,
+    @InjectQueue('email')
+    private sendWelcomeEmailQueue: Queue
   ) {}
 
   @Post('login')
@@ -41,6 +43,9 @@ export class AuthController {
       password: await bcrypt.hash(password, SALT_OR_ROUNDS)
     };
     const user = await this.usersService.create(payload);
+
+    this.sendWelcomeEmailQueue.add('welcome-email', user);
+
     return new UserResource(user);
   }
 }

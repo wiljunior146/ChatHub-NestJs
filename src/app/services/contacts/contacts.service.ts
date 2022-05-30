@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectID } from 'bson';
 import { MongoRepository } from 'typeorm';
 import { Contact } from '../../models/contact.entity';
 import { PaginateContactsInterface } from './interfaces/paginate.interface';

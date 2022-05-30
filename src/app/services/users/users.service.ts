@@ -6,12 +6,13 @@ import { PaginateUsersInterface } from './interfaces/paginate.interface';
 import { Role } from 'src/app/common/enums/role.enum';
 import { CreateUserInterface } from './interfaces/create.interface';
 import { UpdateUserInterface } from './interfaces/update.interface';
+import { MailsService } from 'src/app/mails/mails.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: MongoRepository<User>,
+    private usersRepository: MongoRepository<User>
   ) {}
 
   async paginate(payload: PaginateUsersInterface): Promise<{ data: User[], meta: object }> {
@@ -57,7 +58,8 @@ export class UsersService {
   }
 
   async create(payload: CreateUserInterface): Promise<User> {
-    return await this.usersRepository.save(payload);
+    const user = await this.usersRepository.save(payload);
+    return user;
   }
 
   async update(id: string, payload: UpdateUserInterface): Promise<User> {

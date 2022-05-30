@@ -11,14 +11,26 @@ import { ContactsModule } from './app/http/contacts/contacts.module';
 import { MessagesModule } from './app/http/messages/messages.module';
 import { Message } from './app/models/message.entity';
 import { Contact } from './app/models/contact.entity';
-
 import appConfig from './config/app';
 import databaseConfig from './config/database';
+import queueConfig from './config/queue';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig]
+      load: [appConfig, databaseConfig, queueConfig]
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        redis: {
+          host: config.get<string>('queue.host'),
+          port: config.get<number>('queue.port'),
+          password: config.get<string>('queue.password')
+        }
+      })
     }),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],

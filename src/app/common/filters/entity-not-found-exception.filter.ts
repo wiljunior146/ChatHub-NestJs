@@ -19,7 +19,7 @@ import { BSONTypeError } from 'bson';
  * 
  * @note If we want to throw another exception if the entity is not found,
  *       we must not used the TypeORM methods that throws EntityNotFoundError by default.
- *       EI: findOneOrFail
+ *       IE: findOneOrFail
  * 
  *       Like in authorization, we don't throw entity not found instead we throw unauthorized.
  * @see  https://docs.nestjs.com/exception-filters

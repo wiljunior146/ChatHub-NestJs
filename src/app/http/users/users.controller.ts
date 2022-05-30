@@ -63,7 +63,6 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   async show(@Param('id') id: string) {
     const user = await this.usersService.findOneOrFail(id);
-    console.log(user);
     return new UserResource(user);
   }
 
