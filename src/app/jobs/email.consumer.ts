@@ -1,7 +1,6 @@
 import { Processor, Process } from '@nestjs/bull';
 import { Job } from 'bull';
 import { MailsService } from '../mails/mails.service';
-import { UserInterface } from '../models/interfaces/user.interface';
 
 @Processor('email')
 export class EmailConsumer {
