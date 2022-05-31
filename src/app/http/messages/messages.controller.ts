@@ -28,7 +28,6 @@ import {
   InjectUserToBody,
   InjectUserToQuery
 } from 'src/app/common/decorators/inject.user.decorator';
-import { Console } from 'console';
 
 @Roles(Role.User)
 @UseGuards(JwtAuthGuard, RolesGuard)

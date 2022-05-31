@@ -1,25 +1,35 @@
 import {
-    Entity,
-    OneToMany,
-    ManyToOne,
-    ObjectIdColumn,
-    CreateDateColumn,
-    UpdateDateColumn
-  } from 'typeorm';
-  import { ContactInterface } from './interfaces/contact.interface';
-  import { Message } from 'src/app/models/message.entity';
-  import { User } from 'src/app/models/user.entity';
-  import { ObjectId } from 'mongodb';
-  
-  @Entity({ name: 'invitations' })
-  export class Contact implements ContactInterface {
-    @ObjectIdColumn()
-    _id: ObjectId;
-  
-    @CreateDateColumn()
-    createdAt: Date;
-  
-    @UpdateDateColumn()
-    updatedAt: Date;
-  }
-  
+  Entity,
+  ManyToOne,
+  ObjectIdColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column
+} from 'typeorm';
+import { InvitationInterface } from './interfaces/invitation.interface';
+import { User } from 'src/app/models/user.entity';
+import { ObjectId } from 'mongodb';
+
+@Entity({ name: 'invitations' })
+export class Invitation implements InvitationInterface {
+  @ObjectIdColumn()
+  _id: ObjectId;
+
+  @Column()
+  userId: ObjectId;
+
+  @ManyToOne(() => User, (user) => user.sentInvitations)
+  user: User
+
+  @Column()
+  invitedUserId: ObjectId;
+
+  @ManyToOne(() => User, (user) => user.receivedInvitations)
+  invitedUser: User
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}

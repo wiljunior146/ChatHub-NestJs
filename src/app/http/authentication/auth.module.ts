@@ -17,12 +17,13 @@ import { MailsModule } from 'src/app/mails/mails.module';
 import { EmailConsumer } from 'src/app/jobs/email.consumer';
 import { BullModule } from '@nestjs/bull';
 import { MailsService } from 'src/app/mails/mails.service';
+import { MatchRule } from 'src/app/common/validations/common/match.validator';
 
 @Module({
   imports: [
     UsersModule,
-    MailsModule,
     PassportModule,
+    MailsModule,
     TypeOrmModule.forFeature([User]),
     ConfigModule.forRoot({
       load: [appConfig, databaseConfig]
@@ -48,10 +49,10 @@ import { MailsService } from 'src/app/mails/mails.service';
     LocalStrategy,
     JwtStrategy,
     UserUniqueRule,
-    EmailConsumer,
-    MailsService
-  ],
-  exports: [AuthService]
+    MatchRule,
+    MailsService,
+    EmailConsumer
+  ]
 })
 
 export class AuthModule {}

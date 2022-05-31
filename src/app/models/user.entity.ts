@@ -11,6 +11,7 @@ import { Message } from 'src/app/models/message.entity';
 import { Contact } from 'src/app/models/contact.entity';
 import { UserInterface } from './interfaces/user.interface';
 import { ObjectId } from 'mongodb';
+import { Invitation } from './invitation.entity';
 
 @Entity({ name: 'users' })
 export class User implements UserInterface {
@@ -43,6 +44,12 @@ export class User implements UserInterface {
 
   @OneToMany(() => Contact, (contact) => contact.contactable)
   contactables: Contact[];
+
+  @OneToMany(() => Invitation, (invitation) => invitation.user)
+  sentInvitations: Invitation[]
+
+  @OneToMany(() => Invitation, (invitation) => invitation.invitedUser)
+  receivedInvitations: Invitation[]
 
   @CreateDateColumn()
   createdAt: Date;

@@ -11,25 +11,20 @@ export class ContactResource implements ContactInterface {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
 
-  @Expose({ name: 'user_id' })
   @Transform(({ value }) => value.toString())
   userId: ObjectId;
 
-  @Expose({ name: 'contactable_id' })
   @Transform(({ value }) => value.toString())
   contactableId: ObjectId;
 
   @Transform(({ value }) => new UserResource(value))
   contactable: User;
 
-  @Expose({ name: 'room_id' })
   @Transform(({ value }) => value.toString())
   roomId: ObjectId;
 
-  @Expose({ name: 'created_at' })
   createdAt: Date;
 
-  @Expose({ name: 'updated_at' })
   updatedAt: Date;
 
   constructor(partial: Partial<ContactResource>) {

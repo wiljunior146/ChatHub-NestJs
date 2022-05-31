@@ -4,7 +4,7 @@ export default registerAs('mail', () => ({
   /**
    * Mail host.
    *
-   * @type    {String}
+   * @type {String}
    */
   host: process.env.MAIL_HOST,
 

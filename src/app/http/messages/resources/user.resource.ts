@@ -10,13 +10,10 @@ export class UserResource implements UserInterface {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
 
-  @Expose({ name: 'first_name' })
   firstName: string;
 
-  @Expose({ name: 'last_name' })
   lastName: string;
 
-  @Expose({ name: 'full_name' })
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }

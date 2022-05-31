@@ -1,4 +1,6 @@
+import { Expose } from 'class-transformer';
 import { IsString, Length } from 'class-validator';
+import { Match } from 'src/app/common/decorators/validations/match.decorator';
 import { UserUnique } from 'src/app/common/decorators/validations/users/user-unique.decorator';
 
 export class RegisterDto {
@@ -23,4 +25,9 @@ export class RegisterDto {
   @IsString()
   @Length(1, 255)
   password: string;
+
+  @IsString()
+  @Length(1, 255)
+  @Match('password')
+  passwordConfirmation: string;
 }

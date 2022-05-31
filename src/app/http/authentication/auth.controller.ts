@@ -24,7 +24,7 @@ export class AuthController {
     private authService: AuthService,
     private usersService: UsersService,
     @InjectQueue('email')
-    private sendWelcomeEmailQueue: Queue
+    private emailQueue: Queue
   ) {}
 
   @Post('login')
@@ -36,7 +36,7 @@ export class AuthController {
   @Post('register')
   @UseInterceptors(ClassSerializerInterceptor)
   async register(@Body() registerDto: RegisterDto): Promise<UserResource> {
-    const { password, ...data } = registerDto;
+    const { password, passwordConfirmation, ...data } = registerDto;
     const payload = {
       ...data,
       role: Role.User,
@@ -44,7 +44,7 @@ export class AuthController {
     };
     const user = await this.usersService.create(payload);
 
-    this.sendWelcomeEmailQueue.add('welcome-email', user);
+    await this.emailQueue.add('welcome', user);
 
     return new UserResource(user);
   }

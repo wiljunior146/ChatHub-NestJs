@@ -6,7 +6,6 @@ import { PaginateUsersInterface } from './interfaces/paginate.interface';
 import { Role } from 'src/app/common/enums/role.enum';
 import { CreateUserInterface } from './interfaces/create.interface';
 import { UpdateUserInterface } from './interfaces/update.interface';
-import { MailsService } from 'src/app/mails/mails.service';
 
 @Injectable()
 export class UsersService {
@@ -34,8 +33,8 @@ export class UsersService {
     }};
   }
 
-  async findOne(id: string): Promise<User> {
-    return await this.usersRepository.findOne(id);
+  async findOne(findOptions: any): Promise<User> {
+    return await this.usersRepository.findOne(findOptions);
   }
 
   async findOneOrFail(id: string): Promise<User> {

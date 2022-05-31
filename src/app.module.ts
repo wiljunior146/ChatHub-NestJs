@@ -1,3 +1,4 @@
+import { InvitationsModule } from './app/http/invitations/invitations.module';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -15,6 +16,10 @@ import appConfig from './config/app';
 import databaseConfig from './config/database';
 import queueConfig from './config/queue';
 import { BullModule } from '@nestjs/bull';
+import { Invitation } from './app/models/invitation.entity';
+import { MailsModule } from './app/mails/mails.module';
+import { MailsService } from './app/mails/mails.service';
+import { EmailConsumer } from './app/jobs/email.consumer';
 
 @Module({
   imports: [
@@ -41,16 +46,17 @@ import { BullModule } from '@nestjs/bull';
       })
     }),
     TypeOrmModule.forRootAsync({
-    	imports: [ConfigModule],
+      imports: [ConfigModule],
       inject: [ConfigService],
-		  useFactory: (config: ConfigService) => ({
+      useFactory: (config: ConfigService) => ({
         type: 'mongodb',
         database: config.get<string>('database.database'),
         url: config.get<string>('database.connection'),
         entities: [
           User,
           Contact,
-          Message
+          Message,
+          Invitation
         ],
         synchronize: true,
         useNewUrlParser: true,
@@ -61,7 +67,8 @@ import { BullModule } from '@nestjs/bull';
     UsersModule,
     MessagesModule,
     ProfileModule,
-    ContactsModule
+    ContactsModule,
+    InvitationsModule
   ],
   providers: [
     {
@@ -71,4 +78,4 @@ import { BullModule } from '@nestjs/bull';
   ]
 })
 
-export class AppModule {}
+export class AppModule { }

@@ -11,13 +11,10 @@ export class UserResource implements UserInterface {
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
 
-  @Expose({ name: 'first_name' })
   firstName: string;
 
-  @Expose({ name: 'last_name' })
   lastName: string;
 
-  @Expose({ name: 'full_name' })
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
@@ -32,10 +29,8 @@ export class UserResource implements UserInterface {
   @Transform(roleText)
   role: Role;
 
-  @Expose({ name: 'created_at' })
   createdAt: Date;
 
-  @Expose({ name: 'updated_at' })
   updatedAt: Date;
 
   constructor(partial: Partial<UserResource>) {

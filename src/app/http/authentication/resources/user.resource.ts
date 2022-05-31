@@ -9,6 +9,7 @@ import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UserResource implements UserInterface {
+  @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
 
@@ -16,7 +17,6 @@ export class UserResource implements UserInterface {
 
   lastName: string;
 
-  @Expose()
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
