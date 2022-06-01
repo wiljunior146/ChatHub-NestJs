@@ -8,7 +8,6 @@ import { faker } from '@faker-js/faker';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
-
 import * as bcrypt from 'bcrypt';
 import { UserInterface } from 'src/app/models/interfaces/user.interface';
 import { ContactInterface } from 'src/app/models/interfaces/contact.interface';

@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserExistsRule } from 'src/app/common/validations/users/user-exists.validator';
-import { EmailConsumer } from 'src/app/jobs/email.consumer';
 import { MailsModule } from 'src/app/mails/mails.module';
 import { MailsService } from 'src/app/mails/mails.service';
 import { Invitation } from 'src/app/models/invitation.entity';
@@ -13,25 +12,34 @@ import { UsersService } from 'src/app/services/users/users.service';
 import { InvitationsController } from './invitations.controller';
 import appConfig from 'src/config/app';
 import databaseConfig from 'src/config/database';
+import { InvitationConsumer } from 'src/app/jobs/invitation.consumer';
+import {
+  UserCanCreateInvitationRule
+} from 'src/app/common/validations/invitations/user-can-create-invitation.validator';
+import { ContactsService } from 'src/app/services/contacts/contacts.service';
+import { Contact } from 'src/app/models/contact.entity';
 
 @Module({
   imports: [
     MailsModule,
-    TypeOrmModule.forFeature([Invitation, User]),
+    TypeOrmModule.forFeature([Invitation, User, Contact]),
     ConfigModule.forRoot({
       load: [appConfig, databaseConfig]
     }),
     BullModule.registerQueue({
-      name: 'email'
+      name: 'invitation'
     })
   ],
   providers: [
     InvitationsService,
     UserExistsRule,
     UsersService,
+    ContactsService,
     MailsService,
-    EmailConsumer
+    InvitationConsumer,
+    UserCanCreateInvitationRule
   ],
   controllers: [InvitationsController]
 })
+
 export class InvitationsModule {}

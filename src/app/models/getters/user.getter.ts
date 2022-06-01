@@ -1,7 +1,7 @@
 import { Role } from 'src/app/common/enums/role.enum';
 
 /**
- * Get text equivalent of the role.
+ * Get text equivalent of the specific role.
  * 
  * @param  {object}  property
  * @return {string}

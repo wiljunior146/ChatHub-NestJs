@@ -17,9 +17,6 @@ import databaseConfig from './config/database';
 import queueConfig from './config/queue';
 import { BullModule } from '@nestjs/bull';
 import { Invitation } from './app/models/invitation.entity';
-import { MailsModule } from './app/mails/mails.module';
-import { MailsService } from './app/mails/mails.service';
-import { EmailConsumer } from './app/jobs/email.consumer';
 
 @Module({
   imports: [

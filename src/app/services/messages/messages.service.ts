@@ -43,12 +43,12 @@ export class MessagesService {
     };
   }
 
-  async findOne(id: string): Promise<Message> {
-    return await this.messagesRepository.findOne(id);
+  async findOne(findOptions: any): Promise<Message> {
+    return await this.messagesRepository.findOne(findOptions);
   }
 
-  async findOneOrFail(id: string): Promise<Message> {
-    return await this.messagesRepository.findOneOrFail(id);
+  async findOneOrFail(findOptions: any): Promise<Message> {
+    return await this.messagesRepository.findOneOrFail(findOptions);
   }
 
   async create(payload: CreateMessageInterface): Promise<Message> {
@@ -62,7 +62,7 @@ export class MessagesService {
     });
   }
 
-  async delete(message: Message): Promise<void> {
-    await this.messagesRepository.delete(message._id.toString());
+  async delete(criteria: any): Promise<void> {
+    await this.messagesRepository.delete(criteria);
   }
 }

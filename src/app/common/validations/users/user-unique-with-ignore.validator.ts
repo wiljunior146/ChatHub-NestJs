@@ -8,6 +8,12 @@ import { REQUEST_CONTEXT } from 'src/app/common/constants/request.constant';
 import { UsersService } from 'src/app/services/users/users.service';
 import { ObjectId } from 'mongodb';
 
+/**
+ * User unique with ignore validation.
+ * 
+ * @note It will only walid if the value of the current property doesn't
+ *       exists on our database except the value is being ignored.
+ */
 @Injectable()
 @ValidatorConstraint({ name: 'UserUniqueWithIgnoreRule', async: true })
 export class UserUniqueWithIgnoreRule implements ValidatorConstraintInterface {

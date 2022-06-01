@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
+import { DeleteResult, MongoRepository } from 'typeorm';
 import { User } from 'src/app/models/user.entity';
 import { PaginateUsersInterface } from './interfaces/paginate.interface';
 import { Role } from 'src/app/common/enums/role.enum';
@@ -37,8 +37,8 @@ export class UsersService {
     return await this.usersRepository.findOne(findOptions);
   }
 
-  async findOneOrFail(id: string): Promise<User> {
-    return await this.usersRepository.findOneOrFail(id);
+  async findOneOrFail(findOptions: any): Promise<User> {
+    return await this.usersRepository.findOneOrFail(findOptions);
   }
 
   async findOneByUsernameOrEmail(usernameOrEmail: string): Promise<User> {
@@ -69,9 +69,7 @@ export class UsersService {
     });
   }
 
-  async delete(id: string): Promise<User> {
-    const user = await this.usersRepository.findOneOrFail(id);
-    await this.usersRepository.delete(id);
-    return user;
+  async delete(id: string): Promise<DeleteResult> {
+    return this.usersRepository.delete(id);
   }
 }

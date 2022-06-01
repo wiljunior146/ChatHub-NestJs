@@ -7,8 +7,8 @@ import { Message } from 'src/app/models/message.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Contact } from 'src/app/models/contact.entity';
 import { Seeder } from './seeder';
-
 import databaseConfig from 'src/config/database';
+import { Invitation } from 'src/app/models/invitation.entity';
 
 @Module({
   imports: [
@@ -26,14 +26,15 @@ import databaseConfig from 'src/config/database';
         entities: [
           User,
           Contact,
-          Message
+          Message,
+          Invitation
         ],
         synchronize: true,
         useNewUrlParser: true,
         logging: true
       })
     }),
-    TypeOrmModule.forFeature([User, Contact, Message])
+    TypeOrmModule.forFeature([User, Contact, Message, Invitation])
   ],
   providers: [UsersSeederService, Seeder]
 })

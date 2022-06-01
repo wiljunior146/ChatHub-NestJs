@@ -95,7 +95,7 @@ export class MessagesController {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
 
-    this.messagesService.delete(message);
+    this.messagesService.delete(message._id);
     return new MessageResource(message);
   }
 }

@@ -23,8 +23,8 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
-    @InjectQueue('email')
-    private emailQueue: Queue
+    @InjectQueue('auth')
+    private authQueue: Queue
   ) {}
 
   @Post('login')
@@ -44,7 +44,7 @@ export class AuthController {
     };
     const user = await this.usersService.create(payload);
 
-    await this.emailQueue.add('welcome', user);
+    await this.authQueue.add('send-welcome-mail', user);
 
     return new UserResource(user);
   }

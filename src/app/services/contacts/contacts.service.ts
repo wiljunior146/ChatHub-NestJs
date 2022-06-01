@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectId } from 'mongodb';
+import { ContactInterface } from 'src/app/models/interfaces/contact.interface';
+import { User } from 'src/app/models/user.entity';
 import { MongoRepository } from 'typeorm';
 import { Contact } from '../../models/contact.entity';
 import { PaginateContactsInterface } from './interfaces/paginate.interface';
@@ -44,11 +47,32 @@ export class ContactsService {
     };
   }
 
-  async findOneOrFail(id: string): Promise<Contact> {
-    return await this.contactsRepository.findOneOrFail(id);
+  async findOneOrFail(findOptions: any): Promise<Contact> {
+    return await this.contactsRepository.findOneOrFail(findOptions);
   }
 
   async count(payload: object): Promise<number> {
     return await this.contactsRepository.count(payload);
   }
+
+  async create(inviter: User, user: User): Promise<void> {
+    const roomId = new ObjectId();
+    let contacts: ContactInterface[] = [
+      {
+        userId: inviter._id,
+        contactableId: user._id,
+        roomId,
+        createdAt: new Date,
+        updatedAt: new Date
+      },
+      {
+        userId: user._id,
+        contactableId: inviter._id,
+        roomId,
+        createdAt: new Date,
+        updatedAt: new Date
+      }
+    ];
+    await this.contactsRepository.insertMany(contacts);
+  } 
 }

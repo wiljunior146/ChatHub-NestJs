@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { MessageInterface } from './interfaces/message.interface';
 import { User } from 'src/app/models/user.entity';
-import { Contact } from "src/app/models/contact.entity";
 import { ObjectId } from 'mongodb';
 
 @Entity({ name: 'messages' })

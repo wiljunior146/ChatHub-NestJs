@@ -77,7 +77,8 @@ export class UsersController {
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async destroy(@Param('id') id: string) {
-    const user = await this.usersService.delete(id);
+    const user = await this.usersService.findOneOrFail(id);
+    await this.usersService.delete(id);
     return new UserResource(user);
   }
 }

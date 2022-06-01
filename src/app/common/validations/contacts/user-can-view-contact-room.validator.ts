@@ -8,6 +8,12 @@ import { ContactsService } from 'src/app/services/contacts/contacts.service';
 import { REQUEST_CONTEXT } from '../../constants/request.constant';
 import { ObjectId } from 'mongodb';
 
+/**
+ * Validation for the user getting specific contact room.
+ * 
+ * @note It will only valid if the current user has contact with the
+ *       passed room id or value.
+ */
 @Injectable()
 @ValidatorConstraint({ name: 'UserCanViewContactRoomRule', async: true })
 export class UserCanViewContactRoomRule implements ValidatorConstraintInterface {

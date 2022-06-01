@@ -14,10 +14,10 @@ import { UserUniqueRule } from 'src/app/common/validations/users/user-unique.val
 import appConfig from 'src/config/app';
 import databaseConfig from 'src/config/database';
 import { MailsModule } from 'src/app/mails/mails.module';
-import { EmailConsumer } from 'src/app/jobs/email.consumer';
 import { BullModule } from '@nestjs/bull';
 import { MailsService } from 'src/app/mails/mails.service';
 import { MatchRule } from 'src/app/common/validations/common/match.validator';
+import { AuthConsumer } from 'src/app/jobs/auth.consumer';
 
 @Module({
   imports: [
@@ -39,7 +39,7 @@ import { MatchRule } from 'src/app/common/validations/common/match.validator';
       })
     }),
     BullModule.registerQueue({
-      name: 'email'
+      name: 'auth'
     })
   ],
   controllers: [AuthController],
@@ -51,7 +51,7 @@ import { MatchRule } from 'src/app/common/validations/common/match.validator';
     UserUniqueRule,
     MatchRule,
     MailsService,
-    EmailConsumer
+    AuthConsumer
   ]
 })
 

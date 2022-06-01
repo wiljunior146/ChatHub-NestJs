@@ -5,6 +5,12 @@ import {
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 
+/**
+ * Validation for checking two properties.
+ * 
+ * @note It will only valid if the value of current property matched the
+ *       value of the passed property name.
+ */
 @Injectable()
 @ValidatorConstraint({name: 'Match'})
 export class MatchRule implements ValidatorConstraintInterface {
