@@ -14,7 +14,7 @@ import {
   HttpStatus,
   Delete
  } from '@nestjs/common';
-import { MessagesService } from '../../services/messages/messages.service';
+import { MessagesService } from './messages.service';
 import { GetMessagesDto } from './dto/get-messages.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';

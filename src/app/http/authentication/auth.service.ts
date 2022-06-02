@@ -1,16 +1,26 @@
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/app/services/users/users.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/app/models/user.entity';
+import { MongoRepository } from 'typeorm';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    @InjectRepository(User)
+    private usersRepository: MongoRepository<User>,
     private jwtService: JwtService
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.findOneByUsernameOrEmail(username);
+  async validateUser(username: string, password: string): Promise<User | null> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        $or: [
+          { email: username },
+          { username: username }
+        ]
+      }
+    });
 
     if (user) {
       return await bcrypt.compare(password, user.password)

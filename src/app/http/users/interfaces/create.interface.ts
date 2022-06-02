@@ -5,6 +5,6 @@ export interface CreateUserInterface {
   lastName: string;
   username: string;
   email: string;
-  password: string;
+  password?: string;
   role: Role;
 }

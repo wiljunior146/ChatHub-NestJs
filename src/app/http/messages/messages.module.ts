@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MessagesService } from '../../services/messages/messages.service';
+import { MessagesService } from './messages.service';
 import { MessagesController } from './messages.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from '../../models/message.entity';
@@ -7,7 +7,7 @@ import { Contact } from 'src/app/models/contact.entity';
 import {
   UserCanViewContactRoomRule
 } from 'src/app/common/validations/contacts/user-can-view-contact-room.validator';
-import { ContactsService } from 'src/app/services/contacts/contacts.service';
+import { ContactsService } from 'src/app/http/contacts/contacts.service';
 
 @Module({
   imports: [

@@ -4,7 +4,7 @@ import {
   ValidationArguments
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import { ContactsService } from 'src/app/services/contacts/contacts.service';
+import { ContactsService } from 'src/app/http/contacts/contacts.service';
 import { REQUEST_CONTEXT } from '../../constants/request.constant';
 import { ObjectId } from 'mongodb';
 

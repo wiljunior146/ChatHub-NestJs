@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from 'src/app/http/users/users.module';
-import { UsersService } from 'src/app/services/users/users.service';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
@@ -18,6 +17,7 @@ import { BullModule } from '@nestjs/bull';
 import { MailsService } from 'src/app/mails/mails.service';
 import { MatchRule } from 'src/app/common/validations/common/match.validator';
 import { AuthConsumer } from 'src/app/jobs/auth.consumer';
+import { UsersService } from '../users/users.service';
 
 @Module({
   imports: [

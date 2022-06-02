@@ -34,7 +34,12 @@ import { Invitation } from 'src/app/models/invitation.entity';
         logging: true
       })
     }),
-    TypeOrmModule.forFeature([User, Contact, Message, Invitation])
+    TypeOrmModule.forFeature([
+      User,
+      Contact,
+      Message,
+      Invitation
+    ])
   ],
   providers: [UsersSeederService, Seeder]
 })

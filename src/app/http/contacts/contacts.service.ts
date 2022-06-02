@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { ContactInterface } from 'src/app/models/interfaces/contact.interface';
@@ -17,44 +17,57 @@ export class ContactsService {
   async paginate(
     payload: PaginateContactsInterface
   ): Promise<{ data: Contact[], meta: object }> {
-    const limit: number = payload.limit;
-    const skip: number = (payload.page - 1) * limit;
+    const { page, limit, userId } = payload;
+    const skip: number = (page - 1) * limit;
 
     const contacts: Contact[] = await this.contactsRepository.aggregate([
-        { $match: { userId: payload.userId }},
-        {
-          $lookup: {
-            from: 'users',
-            localField: 'contactableId',
-            foreignField: '_id',
-            as: 'contactable',
-          }
-        },
+        { $match: { userId }},
+        { $lookup: {
+          from: 'users',
+          localField: 'contactableId',
+          foreignField: '_id',
+          as: 'contactable',
+        }},
         { $unwind: '$contactable' }
       ])
       .skip(skip)
       .limit(limit)
       .toArray();
-    const total: number = await this.contactsRepository.count({ userId: payload.userId });
+    const total: number = await this.contactsRepository.count({ userId });
 
     return {
       data: contacts,
-      meta: {
-        total,
-        limit,
-        page: payload.page
-      }
+      meta: { total, limit, page }
     };
   }
 
-  async findOneOrFail(findOptions: any): Promise<Contact> {
-    return await this.contactsRepository.findOneOrFail(findOptions);
+  /**
+   * Display the specified resource.
+   * 
+   * @note   Must not use specific type on parameter findOptions
+   *         like "findOptions: string | ObjectId" so we can still passed ObjectId
+   *         since ObjectID and ObjectId is not the same type.
+   * @param  User  user
+   * @param  any   findOptions
+   * @return Contact
+   */
+  async show(user: User, findOptions: any): Promise<Contact> {
+    const contact = await this.contactsRepository.findOneOrFail(findOptions);
+
+    if (! contact.userId.equals(user._id)) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    return contact;
   }
 
-  async count(payload: object): Promise<number> {
-    return await this.contactsRepository.count(payload);
-  }
-
+  /**
+   * Create contact between the inviter and the invited user.
+   * 
+   * @param  User  inviter
+   * @param  User  user
+   * @return void
+   */
   async create(inviter: User, user: User): Promise<void> {
     const roomId = new ObjectId();
     let contacts: ContactInterface[] = [
@@ -73,6 +86,7 @@ export class ContactsService {
         updatedAt: new Date
       }
     ];
+
     await this.contactsRepository.insertMany(contacts);
   } 
 }

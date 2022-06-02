@@ -16,5 +16,5 @@ export class GetInvitationsDto {
 
   @IsString()
   @IsIn([InvitationType.Sent, InvitationType.Received])
-  type: string;
+  type: InvitationType;
 }

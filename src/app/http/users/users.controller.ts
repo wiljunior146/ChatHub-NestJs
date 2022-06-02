@@ -11,8 +11,7 @@ import {
   Put,
   Delete
 } from '@nestjs/common';
-import { UsersService } from 'src/app/services/users/users.service';
-import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
+import { UsersService } from './users.service';
 import { UserResource } from './resources/user.resource';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { Role } from 'src/app/common/enums/role.enum';
@@ -21,8 +20,6 @@ import { RolesGuard } from 'src/app/common/guards/roles.guard';
 import { GetUsersDto } from './dto/get-users.dto';
 import { User } from 'src/app/models/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRequest } from 'src/app/common/decorators/inject.request.decorator';
 import { Request } from 'src/app/common/enums/request.enum';
@@ -32,8 +29,7 @@ import { Request } from 'src/app/common/enums/request.enum';
 @Controller('admin/users')
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly config: ConfigService
+    private readonly usersService: UsersService
   ) {}
 
   @Get()
@@ -46,23 +42,20 @@ export class UsersController {
     };
   }
 
-  @Post()
+  @Post('staff')
   @UseInterceptors(ClassSerializerInterceptor)
   async store(@Body() body: CreateUserDto) {
-    const password = this.config.get<string>('app.password');
-    const payload = {
+    const user = await this.usersService.create({
       ...body,
-      password: await bcrypt.hash(password, SALT_OR_ROUNDS),
       role: Role.Staff
-    }
-    const user = await this.usersService.create(payload);
+    });
     return new UserResource(user);
   }
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async show(@Param('id') id: string) {
-    const user = await this.usersService.findOneOrFail(id);
+    const user = await this.usersService.show(id);
     return new UserResource(user);
   }
 
@@ -77,8 +70,7 @@ export class UsersController {
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async destroy(@Param('id') id: string) {
-    const user = await this.usersService.findOneOrFail(id);
-    await this.usersService.delete(id);
+    const user = await this.usersService.delete(id);
     return new UserResource(user);
   }
 }

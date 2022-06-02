@@ -3,9 +3,10 @@ import { Job } from 'bull';
 import { MailsService } from 'src/app/mails/mails.service';
 
 /**
- * Processor for Auth module.
+ * Processor for Users module.
  * 
  * @note Each module must have different processor but we can have many process.
+ * @note If we need more logical here, let's create another 
  */
 @Processor('invitation')
 export class InvitationConsumer {
