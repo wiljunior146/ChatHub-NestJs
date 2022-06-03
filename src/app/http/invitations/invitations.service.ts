@@ -17,7 +17,7 @@ export class InvitationsService {
     private invitationsRepository: MongoRepository<Invitation>,
     @InjectRepository(User)
     private usersRepository: MongoRepository<User>,
-    @InjectQueue('invitation')
+    @InjectQueue('invitations')
     private invitationQueue: Queue,
     private contactsService: ContactsService
   ) {}
@@ -92,6 +92,41 @@ export class InvitationsService {
     await this.contactsService.create(inviter, user);
 
     this.invitationQueue.add('send-accepted-invitation-mail', { user, inviter });
+
+    return invitation;
+  }
+
+  async decline(user: User, findOptions: any) {
+    const invitation = await this.invitationsRepository.findOneOrFail(findOptions);
+
+    if (! invitation.invitedUserId.equals(user._id)) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    await this.invitationsRepository.delete(findOptions);
+    const userId: any = invitation.userId;
+    const inviter = await this.usersRepository.findOneOrFail(userId);
+
+    this.invitationQueue.add('send-declined-invitation-mail', { user, inviter });
+
+    return invitation;
+  }
+
+  async cancel(user: User, findOptions: any) {
+    const invitation = await this.invitationsRepository.findOneOrFail(findOptions);
+
+    if (! invitation.userId.equals(user._id)) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    await this.invitationsRepository.delete(findOptions);
+    const invitedUserId: any = invitation.invitedUserId;
+    const invitedUser = await this.usersRepository.findOneOrFail(invitedUserId);
+
+    this.invitationQueue.add('send-cancelled-invitation-mail', {
+      user: invitedUser,
+      inviter: user
+    });
 
     return invitation;
   }

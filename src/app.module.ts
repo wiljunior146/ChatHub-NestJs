@@ -49,12 +49,7 @@ import { Invitation } from './app/models/invitation.entity';
         type: 'mongodb',
         database: config.get<string>('database.database'),
         url: config.get<string>('database.connection'),
-        entities: [
-          User,
-          Contact,
-          Message,
-          Invitation
-        ],
+        autoLoadEntities: true,
         synchronize: true,
         useNewUrlParser: true,
         logging: true

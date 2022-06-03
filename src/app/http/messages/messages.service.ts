@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectId } from 'mongodb';
+import { User } from 'src/app/models/user.entity';
 import { MongoRepository } from 'typeorm';
 import { Message } from '../../models/message.entity';
 import { CreateMessageInterface } from './interfaces/create.interface';
@@ -15,9 +15,10 @@ export class MessagesService {
   ) {}
 
   async paginate(payload: PaginateMessagesInterface) {
+    const { skip, limit, roomId } = payload;
     const messages = await this.messagesRepository
       .aggregate([
-        { $match: { roomId: payload.roomId } },
+        { $match: { roomId }},
         {
           $lookup: {
             from: 'users',
@@ -31,38 +32,43 @@ export class MessagesService {
       .limit(payload.limit)
       .skip(payload.skip)
       .toArray();
-    const total = await this.messagesRepository.count({ roomId: payload.roomId });
+    const total = await this.messagesRepository.count({ roomId });
 
     return {
       data: messages,
-      meta: {
-        total,
-        skip: payload.skip,
-        limit: payload.limit
-      }
+      meta: { total, skip, limit }
     };
-  }
-
-  async findOne(findOptions: any): Promise<Message> {
-    return await this.messagesRepository.findOne(findOptions);
-  }
-
-  async findOneOrFail(findOptions: any): Promise<Message> {
-    return await this.messagesRepository.findOneOrFail(findOptions);
   }
 
   async create(payload: CreateMessageInterface): Promise<Message> {
     return await this.messagesRepository.save(payload);
   }
 
-  async update(message: Message, payload: UpdateMessageInterface): Promise<Message> {
+  async update(
+    user: User,
+    findOptions: any,
+    payload: UpdateMessageInterface
+  ): Promise<Message> {
+    const message = await this.messagesRepository.findOneOrFail(findOptions);
+
+    if (! message.userId.equals(user._id)) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
     return await this.messagesRepository.save({
       ...message,
       ...payload
     });
   }
 
-  async delete(criteria: any): Promise<void> {
-    await this.messagesRepository.delete(criteria);
+  async delete(user: User, findOptions: any): Promise<Message> {
+    const message = await this.messagesRepository.findOneOrFail(findOptions);
+
+    if (! message.userId.equals(user._id)) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    await this.messagesRepository.delete(findOptions);
+    return message;
   }
 }

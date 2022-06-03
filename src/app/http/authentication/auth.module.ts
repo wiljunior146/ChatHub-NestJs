@@ -16,7 +16,6 @@ import { MailsModule } from 'src/app/mails/mails.module';
 import { BullModule } from '@nestjs/bull';
 import { MailsService } from 'src/app/mails/mails.service';
 import { MatchRule } from 'src/app/common/validations/common/match.validator';
-import { AuthConsumer } from 'src/app/jobs/auth.consumer';
 import { UsersService } from '../users/users.service';
 
 @Module({
@@ -37,9 +36,6 @@ import { UsersService } from '../users/users.service';
           expiresIn: config.get<string>('app.signOptions.expiresIn')
         }
       })
-    }),
-    BullModule.registerQueue({
-      name: 'auth'
     })
   ],
   controllers: [AuthController],
@@ -50,8 +46,7 @@ import { UsersService } from '../users/users.service';
     JwtStrategy,
     UserUniqueRule,
     MatchRule,
-    MailsService,
-    AuthConsumer
+    MailsService
   ]
 })
 

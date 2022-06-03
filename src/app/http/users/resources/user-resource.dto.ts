@@ -6,7 +6,7 @@ import { roleText } from 'src/app/models/getters/user.getter';
 import { ObjectId } from 'mongodb';
 
 @Injectable()
-export class UserResource implements UserInterface {
+export class UserResourceDto implements UserInterface {
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
@@ -33,7 +33,7 @@ export class UserResource implements UserInterface {
 
   updatedAt: Date;
 
-  constructor(partial: Partial<UserResource>) {
+  constructor(partial: Partial<UserResourceDto>) {
     Object.assign(this, partial);
   }
 }

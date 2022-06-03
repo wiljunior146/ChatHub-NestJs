@@ -23,10 +23,9 @@ import {
      * @param  {Request.Query | Request.Body | Request.Params}  to
      *         Type of request that will received the property.
      * @param  {string}  property
-     *         Property from the `from` request to be passed to `to` request.
+     *         Property name from the `from` request to be passed to `to` request.
      *         Without property the whole specifc type request object will
      *         be the value for REQUEST_CONTEXT.
-     * @return {void}
      */
     constructor(
       private from: Request.Query | Request.Body | Request.Params,

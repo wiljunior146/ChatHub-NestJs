@@ -3,12 +3,12 @@ import { Job } from 'bull';
 import { MailsService } from 'src/app/mails/mails.service';
 
 /**
- * Processor for Auth module.
+ * Processor for Users module.
  * 
  * @note Each module must have different processor but we can have many process.
  */
-@Processor('auth')
-export class AuthConsumer {
+@Processor('users')
+export class UsersConsumer {
   constructor(
     private mailsService: MailsService
   ) {}

@@ -4,28 +4,27 @@ import {
   ValidationArguments
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/app/services/users/users.service';
+import { User } from 'src/app/models/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MongoRepository } from 'typeorm';
 
 /**
  * User unique validation.
- * 
- * @note It will only walid if the value of the current property doesn't
- *       exists on our database.
  */
 @Injectable()
 @ValidatorConstraint({ name: 'UserUniqueRule', async: true })
 export class UserUniqueRule implements ValidatorConstraintInterface {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: MongoRepository<User>
+  ) {}
 
   async validate(value: string, validationArguments: any): Promise<boolean> {
-    const payload: object = { [validationArguments.property]: value };
 
-    const total = await this.usersService.count(payload);
+    const total = await this.usersRepository.count({
+      [validationArguments.property]: value
+    });
 
     return !total;
-  }
-
-  defaultMessage(args: ValidationArguments): string {
-    return args.property + ' already existed';
   }
 }

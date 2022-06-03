@@ -1,32 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { Transform, Expose, Exclude } from 'class-transformer';
+import { Transform, Expose } from 'class-transformer';
+import { ContactInterface } from 'src/app/models/interfaces/contact.interface';
 import { ObjectId } from 'mongodb';
-import { MessageInterface } from 'src/app/models/interfaces/message.interface';
 import { User } from 'src/app/models/user.entity';
-import { UserResource } from './user.resource';
+import { UserResource } from './user-resource.dto';
 
 @Injectable()
-export class MessageResource implements MessageInterface {
+export class ContactResourceDto implements ContactInterface {
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
 
-  content: string;
-
   @Transform(({ value }) => value.toString())
   userId: ObjectId;
 
-  @Transform(({ value }) => new UserResource(value))
-  user: User;
+  @Transform(({ value }) => value.toString())
+  contactableId: ObjectId;
 
-  @Exclude()
+  @Transform(({ value }) => new UserResource(value))
+  contactable: User;
+
+  @Transform(({ value }) => value.toString())
   roomId: ObjectId;
 
   createdAt: Date;
 
   updatedAt: Date;
 
-  constructor(partial: Partial<MessageResource>) {
+  constructor(partial: Partial<ContactResourceDto>) {
     Object.assign(this, partial);
   }
 }

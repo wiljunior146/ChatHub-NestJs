@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Role } from 'src/app/common/enums/role.enum';
 import { Exclude, Transform, Expose } from 'class-transformer';
-import { Message } from 'src/app/models/message.entity';
 import { UserInterface } from 'src/app/models/interfaces/user.interface';
-import { Contact } from 'src/app/models/contact.entity';
-import { roleText } from 'src/app/models/getters/user.getter';
 import { ObjectId } from 'mongodb';
 
 @Injectable()
-export class UserResource implements UserInterface {
+export class UserResourceDto implements UserInterface {
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
@@ -28,20 +25,16 @@ export class UserResource implements UserInterface {
   @Exclude()
   password: string;
 
-  @Transform(roleText)
+  @Exclude()
   role: Role;
 
+  @Exclude()
   createdAt: Date;
 
+  @Exclude()
   updatedAt: Date;
 
-  messages: Message[];
-
-  contacts: Contact[];
-
-  contactables: Contact[];
-
-  constructor(partial: Partial<UserResource>) {
+  constructor(partial: Partial<UserResourceDto>) {
     Object.assign(this, partial);
   }
 }

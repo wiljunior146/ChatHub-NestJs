@@ -5,7 +5,7 @@ import { UserInterface } from 'src/app/models/interfaces/user.interface';
 import { ObjectId } from 'mongodb';
 
 @Injectable()
-export class UserResource implements UserInterface {
+export class UserResourceDto implements UserInterface {
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
   _id: ObjectId;
@@ -34,7 +34,7 @@ export class UserResource implements UserInterface {
   @Exclude()
   updatedAt: Date;
 
-  constructor(partial: Partial<UserResource>) {
+  constructor(partial: Partial<UserResourceDto>) {
     Object.assign(this, partial);
   }
 }

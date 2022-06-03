@@ -9,13 +9,17 @@ import { PaginateUsersInterface } from './interfaces/paginate.interface';
 import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserInterface } from './interfaces/update.interface';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: MongoRepository<User>,
-    private readonly config: ConfigService
+    private readonly config: ConfigService,
+    @InjectQueue('users')
+    private usersQueue: Queue
   ) {}
 
   async paginate(
@@ -49,6 +53,8 @@ export class UsersService {
       password: await bcrypt.hash(password, SALT_OR_ROUNDS)
     });
 
+    await this.usersQueue.add('send-welcome-mail', user);
+
     return user;
   }
 
@@ -67,7 +73,10 @@ export class UsersService {
 
   async update(findOptions: any, payload: UpdateUserInterface): Promise<User> {
     const user = await this.usersRepository.findOneOrFail(findOptions);
-    return await this.usersRepository.save({ ...user, ...payload });
+    const password = payload.password
+      ? await bcrypt.hash(payload.password, SALT_OR_ROUNDS)
+      : user.password;
+    return await this.usersRepository.save({ ...user, ...payload, password });
   }
 
   async delete(findOptions: any): Promise<User> {

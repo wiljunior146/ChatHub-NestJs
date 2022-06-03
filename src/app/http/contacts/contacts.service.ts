@@ -44,12 +44,9 @@ export class ContactsService {
   /**
    * Display the specified resource.
    * 
-   * @note   Must not use specific type on parameter findOptions
-   *         like "findOptions: string | ObjectId" so we can still passed ObjectId
-   *         since ObjectID and ObjectId is not the same type.
-   * @param  User  user
-   * @param  any   findOptions
-   * @return Contact
+   * @note Must not use specific type on parameter findOptions
+   *       like "findOptions: string | ObjectId" so we can still passed ObjectId
+   *       since ObjectID and ObjectId is not the same type.
    */
   async show(user: User, findOptions: any): Promise<Contact> {
     const contact = await this.contactsRepository.findOneOrFail(findOptions);
@@ -63,10 +60,6 @@ export class ContactsService {
 
   /**
    * Create contact between the inviter and the invited user.
-   * 
-   * @param  User  inviter
-   * @param  User  user
-   * @return void
    */
   async create(inviter: User, user: User): Promise<void> {
     const roomId = new ObjectId();

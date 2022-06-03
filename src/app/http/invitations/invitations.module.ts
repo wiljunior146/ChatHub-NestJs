@@ -9,11 +9,10 @@ import { User } from 'src/app/models/user.entity';
 import { InvitationsController } from './invitations.controller';
 import appConfig from 'src/config/app';
 import databaseConfig from 'src/config/database';
-import { InvitationConsumer } from 'src/app/jobs/invitations.consumer';
+import { InvitationsConsumer } from 'src/app/jobs/invitations.consumer';
 import { ContactsService } from 'src/app/http/contacts/contacts.service';
 import { Contact } from 'src/app/models/contact.entity';
 import { InvitationsService } from './invitations.service';
-import { UsersService } from '../users/users.service';
 import {
   UserExistsRule
 } from 'src/app/common/validations/users/user-exists.validator';
@@ -31,16 +30,15 @@ import { ContactsModule } from '../contacts/contacts.module';
       load: [appConfig, databaseConfig]
     }),
     BullModule.registerQueue({
-      name: 'invitation'
+      name: 'invitations'
     })
   ],
   providers: [
     InvitationsService,
     UserExistsRule,
-    UsersService,
     ContactsService,
     MailsService,
-    InvitationConsumer,
+    InvitationsConsumer,
     UserCanCreateInvitationRule
   ],
   controllers: [InvitationsController]
