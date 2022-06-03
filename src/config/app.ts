@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config'
+import { Environment } from 'src/app/common/enums/environment.enum';
 
 export default registerAs('app', () => ({
   /**
@@ -7,6 +8,13 @@ export default registerAs('app', () => ({
    * @type {String}
    */
   name: process.env.APP_NAME || 'NestJs',
+
+  /**
+   * Application environment.
+   * 
+   * @type {Environment}
+   */
+  env: process.env.APP_ENV || 'production',
 
   /**
    * Application Url.

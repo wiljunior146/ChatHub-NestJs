@@ -8,14 +8,12 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor
 } from '@nestjs/common';
-import { UsersService } from 'src/app/services/users/users.service';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
-import { UpdateProfileDto } from './dto/update-profile.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UpdateProfileRequestDto } from './requests/update-profile-request.dto';
+import { UpdatePasswordRequestDto } from './requests/update-password-request.dto';
 import { InjectUserToBody } from 'src/app/common/decorators/inject.user.decorator';
-import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
-import { UserResource } from './resources/user.resource';
-import * as bcrypt from 'bcrypt';
+import { UserResourceDto } from './resources/user-resource.dto';
+import { UsersService } from '../users/users.service';
 
 @Controller('profile')
 export class ProfileController {
@@ -24,8 +22,8 @@ export class ProfileController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  index(@Request() req): UserResource {
-    return new UserResource(req.user);
+  index(@Request() req) {
+    return new UserResourceDto(req.user);
   }
 
   @Put()
@@ -33,22 +31,20 @@ export class ProfileController {
   @InjectUserToBody()
   @UseInterceptors(ClassSerializerInterceptor)
   async update(
-    @Body() updateProfile: UpdateProfileDto,
+    @Body() body: UpdateProfileRequestDto,
     @Request() req
-  ): Promise<UserResource> {
-    const user = await this.usersService.update(req.user.id, updateProfile);
-    return new UserResource(user);
+  ) {
+    const user = await this.usersService.update(req.user._id, body);
+    return new UserResourceDto(user);
   }
 
   @Put('password')
   @UseGuards(JwtAuthGuard)
   async updatePassword(
-    @Body() updateProfile: UpdatePasswordDto,
+    @Body() body: UpdatePasswordRequestDto,
     @Request() req
   ) {
-    await this.usersService.update(req.user.id, {
-      password: await bcrypt.hash(updateProfile.password, SALT_OR_ROUNDS)
-    });
+    await this.usersService.update(req.user._id, body);
 
     return 'success';
   }

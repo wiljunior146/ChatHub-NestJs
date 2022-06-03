@@ -7,11 +7,7 @@ import { Request } from 'src/app/common/enums/request.enum';
  * Injecting request property to another request type to be able
  * to use on custom class validator.
  *
- * @see    https://github.com/AvantaR/nestjs-validation-tips
- * @param  {Request.Query | Request.Body | Request.Params}  from
- * @param  {Request.Query | Request.Body | Request.Params}  to
- * @param  {string | null}  property
- * @return {void}
+ * @see https://github.com/AvantaR/nestjs-validation-tips
  */
 export function InjectRequest(
   from: Request.Query | Request.Body | Request.Params,

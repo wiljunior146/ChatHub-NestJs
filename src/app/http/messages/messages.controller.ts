@@ -10,19 +10,17 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Put,
-  HttpException,
-  HttpStatus,
   Delete
  } from '@nestjs/common';
-import { MessagesService } from '../../services/messages/messages.service';
-import { GetMessagesDto } from './dto/get-messages.dto';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
+import { MessagesService } from './messages.service';
+import { GetMessagesRequestDto } from './requests/get-messages-request.dto';
+import { CreateMessageRequestDto } from './requests/create-message-request.dto';
+import { UpdateMessageRequestDto } from './requests/update-message-request.dto';
 import { RolesGuard } from 'src/app/common/guards/roles.guard';
 import { Role } from 'src/app/common/enums/role.enum';
 import { Roles } from 'src/app/common/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
-import { MessageResource } from './resources/message.resource';
+import { MessageResourceDto } from './resources/message-resource.dto';
 import { ObjectId } from 'mongodb';
 import {
   InjectUserToBody,
@@ -38,7 +36,7 @@ export class MessagesController {
   @Get()
   @InjectUserToQuery()
   @UseInterceptors(ClassSerializerInterceptor)
-  async index(@Query() query: GetMessagesDto) {
+  async index(@Query() query: GetMessagesRequestDto) {
     const { roomId, ...payload } = query;
     const { data, meta} = await this.messagesService.paginate({
       ...payload,
@@ -46,7 +44,7 @@ export class MessagesController {
     });
 
     return {
-      data: data.map((message) => new MessageResource(message)),
+      data: data.map((message) => new MessageResourceDto(message)),
       meta
     };
   }
@@ -54,7 +52,10 @@ export class MessagesController {
   @Post()
   @InjectUserToBody()
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() body: CreateMessageDto, @Request() req) {
+  async create(
+    @Body() body: CreateMessageRequestDto,
+    @Request() req
+  ) {
     const { roomId, ...data }: any = body;
     const payload = {
       roomId: new ObjectId(roomId),
@@ -63,24 +64,18 @@ export class MessagesController {
     };
     const message = await this.messagesService.create(payload);
 
-    return new MessageResource(message);
+    return new MessageResourceDto(message);
   }
 
   @Put(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async update(
     @Param('id') id: string,
-    @Body() body: UpdateMessageDto,
+    @Body() body: UpdateMessageRequestDto,
     @Request() req
   ) {
-    const message = await this.messagesService.findOneOrFail(id);
-
-    if (! message.userId.equals(req.user._id)) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-
-    const updatedMessage = await this.messagesService.update(message, body);
-    return new MessageResource(updatedMessage);
+    const updatedMessage = await this.messagesService.update(req.user, id, body);
+    return new MessageResourceDto(updatedMessage);
   }
 
   @Delete(':id')
@@ -89,13 +84,7 @@ export class MessagesController {
     @Param('id') id: string,
     @Request() req
   ) {
-    const message = await this.messagesService.findOneOrFail(id);
-
-    if (! message.userId.equals(req.user._id)) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-
-    this.messagesService.delete(message._id);
-    return new MessageResource(message);
+    const message = await this.messagesService.delete(req.user, id);
+    return new MessageResourceDto(message);
   }
 }

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ContactsService } from '../../services/contacts/contacts.service';
+import { ContactsService } from './contacts.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Contact } from '../../models/contact.entity';
 import { ContactsController } from './contacts.controller';
@@ -9,7 +9,8 @@ import { ContactsController } from './contacts.controller';
     TypeOrmModule.forFeature([Contact])
   ],
   providers: [ContactsService],
-  controllers: [ContactsController]
+  controllers: [ContactsController],
+  exports: [ContactsService]
 })
 
 export class ContactsModule {}

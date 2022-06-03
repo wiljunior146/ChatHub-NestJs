@@ -11,19 +11,16 @@ import {
   Put,
   Delete
 } from '@nestjs/common';
-import { UsersService } from 'src/app/services/users/users.service';
-import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
-import { UserResource } from './resources/user.resource';
+import { UsersService } from './users.service';
+import { UserResourceDto } from './resources/user-resource.dto';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { Role } from 'src/app/common/enums/role.enum';
 import { Roles } from 'src/app/common/decorators/roles.decorator';
 import { RolesGuard } from 'src/app/common/guards/roles.guard';
-import { GetUsersDto } from './dto/get-users.dto';
+import { GetUsersRequestDto } from './requests/get-users-request.dto';
 import { User } from 'src/app/models/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserRequestDto } from './requests/create-user-request.dto';
+import { UpdateUserRequestDto } from './requests/update-user-request.dto';
 import { InjectRequest } from 'src/app/common/decorators/inject.request.decorator';
 import { Request } from 'src/app/common/enums/request.enum';
 
@@ -32,53 +29,51 @@ import { Request } from 'src/app/common/enums/request.enum';
 @Controller('admin/users')
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly config: ConfigService
+    private readonly usersService: UsersService
   ) {}
 
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  async index(@Query() query: GetUsersDto): Promise<{ data: UserResource[], meta: object }> {
+  async index(@Query() query: GetUsersRequestDto) {
     const { data, meta } = await this.usersService.paginate(query);
     return {
-      data: data.map((user: User) => new UserResource(user)),
+      data: data.map((user: User) => new UserResourceDto(user)),
       meta
     };
   }
 
-  @Post()
+  @Post('staff')
   @UseInterceptors(ClassSerializerInterceptor)
-  async store(@Body() body: CreateUserDto) {
-    const password = this.config.get<string>('app.password');
-    const payload = {
+  async store(@Body() body: CreateUserRequestDto) {
+    const user = await this.usersService.create({
       ...body,
-      password: await bcrypt.hash(password, SALT_OR_ROUNDS),
       role: Role.Staff
-    }
-    const user = await this.usersService.create(payload);
-    return new UserResource(user);
+    });
+    return new UserResourceDto(user);
   }
 
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async show(@Param('id') id: string) {
-    const user = await this.usersService.findOneOrFail(id);
-    return new UserResource(user);
+    const user = await this.usersService.show(id);
+    return new UserResourceDto(user);
   }
 
   @Put(':id')
   @InjectRequest(Request.Params, Request.Body, 'id')
   @UseInterceptors(ClassSerializerInterceptor)
-  async update(@Param('id') id: string, @Body() body: UpdateUserDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() body: UpdateUserRequestDto
+  ) {
     const user = await this.usersService.update(id, body);
-    return new UserResource(user);
+    return new UserResourceDto(user);
   }
 
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async destroy(@Param('id') id: string) {
-    const user = await this.usersService.findOneOrFail(id);
-    await this.usersService.delete(id);
-    return new UserResource(user);
+    const user = await this.usersService.delete(id);
+    return new UserResourceDto(user);
   }
 }

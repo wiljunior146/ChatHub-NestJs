@@ -1,12 +1,9 @@
-import { InjectQueue } from '@nestjs/bull';
 import {
   Body,
   ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Post,
   Put,
@@ -15,47 +12,34 @@ import {
   UseGuards,
   UseInterceptors
 } from '@nestjs/common';
-import { Queue } from 'bull';
-import { ObjectId } from 'mongodb';
 import { InjectUserToBody } from 'src/app/common/decorators/inject.user.decorator';
 import { Roles } from 'src/app/common/decorators/roles.decorator';
-import { InvitationType } from 'src/app/common/enums/invitation-type.enum';
 import { Role } from 'src/app/common/enums/role.enum';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/app/common/guards/roles.guard';
-import { ContactsService } from 'src/app/services/contacts/contacts.service';
-import { InvitationsService } from 'src/app/services/invitations/invitations.service';
-import { UsersService } from 'src/app/services/users/users.service';
-import { CreateInvitationDto } from './dto/create-invitation.dto';
-import { GetInvitationsDto } from './dto/get-invitations.dto';
-import { InvitationResource } from './resources/invitation.resource';
+import { InvitationsService } from 'src/app/http/invitations/invitations.service';
+import { CreateInvitationRequestDto } from './requests/create-invitation-request.dto';
+import { GetInvitationsRequestDto } from './requests/get-invitations-request.dto';
+import { InvitationResourceDto } from './resources/invitation-resource.dto';
 
 @Roles(Role.User)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('invitations')
 export class InvitationsController {
   constructor(
-    private readonly invitationsService: InvitationsService,
-    private readonly usersService: UsersService,
-    private readonly contactsService: ContactsService,
-    @InjectQueue('invitation')
-    private invitationQueue: Queue
+    private readonly invitationsService: InvitationsService
   ) {}
 
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  async index(@Query() query: GetInvitationsDto, @Request() req) {
-    const property = query.type == InvitationType.Sent
-      ? 'userId'
-      : 'invitedUserId';
-    const { data, meta} = await this.invitationsService.paginate({
-      page: query.page,
-      limit: query.limit,
-      [property]: req.user._id
-    });
-
+  async index(
+    @Query() query: GetInvitationsRequestDto,
+    @Request() req
+  ) {
+    const payload = { ...query, userId: req.user._id };
+    const { data, meta} = await this.invitationsService.paginate(payload);
     return {
-      data: data.map((message) => new InvitationResource(message)),
+      data: data.map((message) => new InvitationResourceDto(message)),
       meta
     };
   }
@@ -63,20 +47,15 @@ export class InvitationsController {
   @Post()
   @InjectUserToBody()
   @UseInterceptors(ClassSerializerInterceptor)
-  async create(@Body() body: CreateInvitationDto, @Request() req) {
-    const payload = {
-      userId: req.user._id,
-      invitedUserId: new ObjectId(body.invitedUserId)
-    };
-    const invitation = await this.invitationsService.create(payload);
-    const invitedUser = await this.usersService.findOne(body.invitedUserId);
-
-    this.invitationQueue.add('send-invitation-mail', {
-      user: invitedUser,
-      inviter: req.user
-    });
-
-    return new InvitationResource(invitation);
+  async create(
+    @Body() body: CreateInvitationRequestDto,
+    @Request() req
+  ) {
+    const invitation = await this.invitationsService.create(
+      req.user,
+      body.invitedUserId
+    );
+    return new InvitationResourceDto(invitation);
   }
 
   @Put('accept/:id')
@@ -85,22 +64,8 @@ export class InvitationsController {
     @Param('id') id: string,
     @Request() req
   ) {
-    const invitation = await this.invitationsService.findOneOrFail(id);
-
-    if (! invitation.invitedUserId.equals(req.user._id)) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-
-    await this.invitationsService.delete(id);
-    const inviter = await this.usersService.findOneOrFail(invitation.userId);
-    await this.contactsService.create(inviter, req.user);
-
-    this.invitationQueue.add('send-accepted-invitation-mail', {
-      user: req.user,
-      inviter
-    });
-
-    return new InvitationResource(invitation);
+    const invitation = await this.invitationsService.accept(req.user, id);
+    return new InvitationResourceDto(invitation);
   }
 
   @Delete('decline/:id')
@@ -109,21 +74,8 @@ export class InvitationsController {
     @Param('id') id: string,
     @Request() req
   ) {
-    const invitation = await this.invitationsService.findOneOrFail(id);
-
-    if (! invitation.invitedUserId.equals(req.user._id)) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-
-    await this.invitationsService.delete(id);
-    const inviter = await this.usersService.findOneOrFail(invitation.userId);
-
-    this.invitationQueue.add('send-declined-invitation-mail', {
-      user: req.user,
-      inviter
-    });
-
-    return new InvitationResource(invitation);
+    const invitation = await this.invitationsService.decline(req.user, id);
+    return new InvitationResourceDto(invitation);
   }
 
   @Delete(':id')
@@ -132,20 +84,7 @@ export class InvitationsController {
     @Param('id') id: string,
     @Request() req
   ) {
-    const invitation = await this.invitationsService.findOneOrFail(id);
-
-    if (! invitation.userId.equals(req.user._id)) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-
-    await this.invitationsService.delete(id);
-    const invitedUser = await this.usersService.findOneOrFail(invitation.invitedUserId);
-
-    this.invitationQueue.add('send-cancelled-invitation-mail', {
-      user: invitedUser,
-      inviter: req.user
-    });
-
-    return new InvitationResource(invitation);
+    const invitation = await this.invitationsService.cancel(req.user, id);
+    return new InvitationResourceDto(invitation);
   }
 }

@@ -28,21 +28,6 @@ export class UsersSeederService {
   ) {}
 
   /**
-   * Truncate or remove all data from users, contacts, and messages collection.
-   *
-   * @return {void}
-   */
-  async clear () {
-    Logger.warn('Clearing users, contacts, and messages collection.');
-
-    await this.contactsRepository.clear();
-    await this.usersRepository.clear();
-    await this.messagesRepository.clear();
-
-    Logger.log('Done clearing users, contacts, and messages collection.');
-  }
-
-  /**
    * Create admin.
    * 
    * @return {void}
