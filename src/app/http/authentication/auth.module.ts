@@ -8,7 +8,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/app/models/user.entity';
+import { User } from 'src/app/entities/user.entity';
 import { UserUniqueRule } from 'src/app/common/validations/users/user-unique.validator';
 import appConfig from 'src/config/app';
 import databaseConfig from 'src/config/database';

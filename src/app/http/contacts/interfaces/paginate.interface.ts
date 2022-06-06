@@ -1,7 +1,7 @@
-import { ObjectId } from "mongodb";
+import { ObjectID } from "mongodb";
 
 export interface PaginateContactsInterface {
   page: number;
   limit: number;
-  userId: ObjectId;
+  userId: ObjectID;
 }

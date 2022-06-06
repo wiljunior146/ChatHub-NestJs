@@ -4,7 +4,7 @@ import {
   ValidationArguments
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/app/models/user.entity';
+import { User } from 'src/app/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 

@@ -2,10 +2,10 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Environment } from 'src/app/common/enums/environment.enum';
-import { Contact } from 'src/app/models/contact.entity';
-import { Invitation } from 'src/app/models/invitation.entity';
-import { Message } from 'src/app/models/message.entity';
-import { User } from 'src/app/models/user.entity';
+import { Contact } from 'src/app/entities/contact.entity';
+import { Invitation } from 'src/app/entities/invitation.entity';
+import { Message } from 'src/app/entities/message.entity';
+import { User } from 'src/app/entities/user.entity';
 import { MongoRepository } from 'typeorm';
 import { UsersSeederService } from './users/users-seeder.service';
 

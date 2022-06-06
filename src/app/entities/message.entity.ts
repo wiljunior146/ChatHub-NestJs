@@ -7,25 +7,25 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 import { MessageInterface } from './interfaces/message.interface';
-import { User } from 'src/app/models/user.entity';
-import { ObjectId } from 'mongodb';
+import { User } from 'src/app/entities/user.entity';
+import { ObjectID } from 'mongodb';
 
 @Entity({ name: 'messages' })
 export class Message implements MessageInterface {
   @ObjectIdColumn()
-  _id: ObjectId;
+  _id: ObjectID;
 
   @Column()
   content: string;
 
   @Column()
-  userId: ObjectId;
+  userId: ObjectID;
 
   @ManyToOne(() => User, (user) => user.messages)
   user: User
 
   @Column()
-  roomId: ObjectId;
+  roomId: ObjectID;
 
   @CreateDateColumn()
   createdAt: Date;

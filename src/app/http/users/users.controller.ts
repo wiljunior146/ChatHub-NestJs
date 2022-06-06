@@ -18,11 +18,13 @@ import { Role } from 'src/app/common/enums/role.enum';
 import { Roles } from 'src/app/common/decorators/roles.decorator';
 import { RolesGuard } from 'src/app/common/guards/roles.guard';
 import { GetUsersRequestDto } from './requests/get-users-request.dto';
-import { User } from 'src/app/models/user.entity';
+import { User } from 'src/app/entities/user.entity';
 import { CreateUserRequestDto } from './requests/create-user-request.dto';
 import { UpdateUserRequestDto } from './requests/update-user-request.dto';
 import { InjectRequest } from 'src/app/common/decorators/inject.request.decorator';
 import { Request } from 'src/app/common/enums/request.enum';
+import { ObjectID } from 'mongodb';
+import { InvalidObjectIdException } from 'src/app/exceptions/invalid-object-id.exception';
 
 @Roles(Role.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -55,6 +57,8 @@ export class UsersController {
   @Get(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async show(@Param('id') id: string) {
+    if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+
     const user = await this.usersService.show(id);
     return new UserResourceDto(user);
   }
@@ -66,6 +70,8 @@ export class UsersController {
     @Param('id') id: string,
     @Body() body: UpdateUserRequestDto
   ) {
+    if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+
     const user = await this.usersService.update(id, body);
     return new UserResourceDto(user);
   }
@@ -73,6 +79,8 @@ export class UsersController {
   @Delete(':id')
   @UseInterceptors(ClassSerializerInterceptor)
   async destroy(@Param('id') id: string) {
+    if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+
     const user = await this.usersService.delete(id);
     return new UserResourceDto(user);
   }

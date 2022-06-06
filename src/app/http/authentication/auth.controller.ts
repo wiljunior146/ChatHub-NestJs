@@ -23,7 +23,7 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  async login(@Request() req): Promise<{ access_token: string }> {
+  async login(@Request() req) {
     return this.authService.login(req.user);
   }
 

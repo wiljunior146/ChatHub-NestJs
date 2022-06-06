@@ -7,16 +7,16 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 import { Role } from 'src/app/common/enums/role.enum';
-import { Message } from 'src/app/models/message.entity';
-import { Contact } from 'src/app/models/contact.entity';
+import { Message } from 'src/app/entities/message.entity';
+import { Contact } from 'src/app/entities/contact.entity';
 import { UserInterface } from './interfaces/user.interface';
-import { ObjectId } from 'mongodb';
+import { ObjectID } from 'mongodb';
 import { Invitation } from './invitation.entity';
 
 @Entity({ name: 'users' })
 export class User implements UserInterface {
   @ObjectIdColumn()
-  _id: ObjectId;
+  _id: ObjectID;
 
   @Column()
   firstName: string;

@@ -18,9 +18,11 @@ import { Role } from 'src/app/common/enums/role.enum';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/app/common/guards/roles.guard';
 import { InvitationsService } from 'src/app/http/invitations/invitations.service';
+import { ObjectID } from 'mongodb';
 import { CreateInvitationRequestDto } from './requests/create-invitation-request.dto';
 import { GetInvitationsRequestDto } from './requests/get-invitations-request.dto';
 import { InvitationResourceDto } from './resources/invitation-resource.dto';
+import { InvalidObjectIdException } from 'src/app/exceptions/invalid-object-id.exception';
 
 @Roles(Role.User)
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -64,6 +66,8 @@ export class InvitationsController {
     @Param('id') id: string,
     @Request() req
   ) {
+    if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+
     const invitation = await this.invitationsService.accept(req.user, id);
     return new InvitationResourceDto(invitation);
   }
@@ -74,6 +78,8 @@ export class InvitationsController {
     @Param('id') id: string,
     @Request() req
   ) {
+    if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+
     const invitation = await this.invitationsService.decline(req.user, id);
     return new InvitationResourceDto(invitation);
   }
@@ -84,6 +90,8 @@ export class InvitationsController {
     @Param('id') id: string,
     @Request() req
   ) {
+    if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+
     const invitation = await this.invitationsService.cancel(req.user, id);
     return new InvitationResourceDto(invitation);
   }

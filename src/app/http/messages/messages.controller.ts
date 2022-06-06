@@ -21,11 +21,12 @@ import { Role } from 'src/app/common/enums/role.enum';
 import { Roles } from 'src/app/common/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { MessageResourceDto } from './resources/message-resource.dto';
-import { ObjectId } from 'mongodb';
+import { ObjectID } from 'mongodb';
 import {
   InjectUserToBody,
   InjectUserToQuery
 } from 'src/app/common/decorators/inject.user.decorator';
+import { InvalidObjectIdException } from 'src/app/exceptions/invalid-object-id.exception';
 
 @Roles(Role.User)
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -40,7 +41,7 @@ export class MessagesController {
     const { roomId, ...payload } = query;
     const { data, meta} = await this.messagesService.paginate({
       ...payload,
-      roomId: new ObjectId(roomId)
+      roomId: new ObjectID(roomId)
     });
 
     return {
@@ -58,7 +59,7 @@ export class MessagesController {
   ) {
     const { roomId, ...data }: any = body;
     const payload = {
-      roomId: new ObjectId(roomId),
+      roomId: new ObjectID(roomId),
       senderId: req.user._id,
       ...data
     };
@@ -74,6 +75,8 @@ export class MessagesController {
     @Body() body: UpdateMessageRequestDto,
     @Request() req
   ) {
+    if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+
     const updatedMessage = await this.messagesService.update(req.user, id, body);
     return new MessageResourceDto(updatedMessage);
   }
@@ -84,6 +87,8 @@ export class MessagesController {
     @Param('id') id: string,
     @Request() req
   ) {
+    if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+
     const message = await this.messagesService.delete(req.user, id);
     return new MessageResourceDto(message);
   }

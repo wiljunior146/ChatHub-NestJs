@@ -1,11 +1,11 @@
 import { Role } from 'src/app/common/enums/role.enum';
-import { Message } from 'src/app/models/message.entity';
-import { Contact } from 'src/app/models/contact.entity';
-import { ObjectId } from 'mongodb';
+import { Message } from 'src/app/entities/message.entity';
+import { Contact } from 'src/app/entities/contact.entity';
+import { ObjectID } from 'mongodb';
 import { Invitation } from '../invitation.entity';
 
 export interface UserInterface {
-  _id?: ObjectId;
+  _id?: ObjectID;
   firstName: string;
   lastName: string;
   username: string;

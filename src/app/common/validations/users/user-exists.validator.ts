@@ -1,12 +1,12 @@
 import {
   ValidatorConstraint,
-  ValidatorConstraintInterface,
-  ValidationArguments
+  ValidatorConstraintInterface
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/app/models/user.entity';
+import { User } from 'src/app/entities/user.entity';
 import { MongoRepository } from 'typeorm';
+import { ObjectID } from 'mongodb';
 
 /**
  * User exists validation.
@@ -23,7 +23,8 @@ export class UserExistsRule implements ValidatorConstraintInterface {
   ) {}
 
   async validate(value: any, validationArguments: any): Promise<boolean> {
-
+    if (! ObjectID.isValid(value)) return false;
+  
     const [property] = validationArguments.constraints;
     const user = await this.usersRepository.findOne({ [property]: value });
 

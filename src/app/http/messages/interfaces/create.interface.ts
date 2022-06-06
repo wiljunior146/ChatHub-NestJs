@@ -1,7 +1,7 @@
-import { ObjectId } from "mongodb";
+import { ObjectID } from "mongodb";
 
 export interface CreateMessageInterface {
   content: string;
-  senderId: ObjectId;
-  roomId: ObjectId;
+  senderId: ObjectID;
+  roomId: ObjectID;
 }

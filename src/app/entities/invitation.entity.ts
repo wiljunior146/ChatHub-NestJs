@@ -7,22 +7,22 @@ import {
   Column
 } from 'typeorm';
 import { InvitationInterface } from './interfaces/invitation.interface';
-import { User } from 'src/app/models/user.entity';
-import { ObjectId } from 'mongodb';
+import { User } from 'src/app/entities/user.entity';
+import { ObjectID } from 'mongodb';
 
 @Entity({ name: 'invitations' })
 export class Invitation implements InvitationInterface {
   @ObjectIdColumn()
-  _id: ObjectId;
+  _id: ObjectID;
 
   @Column()
-  userId: ObjectId;
+  userId: ObjectID;
 
   @ManyToOne(() => User, (user) => user.sentInvitations)
   user: User
 
   @Column()
-  invitedUserId: ObjectId;
+  invitedUserId: ObjectID;
 
   @ManyToOne(() => User, (user) => user.receivedInvitations)
   invitedUser: User

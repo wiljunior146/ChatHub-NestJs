@@ -1,19 +1,19 @@
 import { MongoRepository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/app/models/user.entity';
-import { Contact } from 'src/app/models/contact.entity';
+import { User } from 'src/app/entities/user.entity';
+import { Contact } from 'src/app/entities/contact.entity';
 import { Role } from 'src/app/common/enums/role.enum';
 import { faker } from '@faker-js/faker';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
 import * as bcrypt from 'bcrypt';
-import { UserInterface } from 'src/app/models/interfaces/user.interface';
-import { ContactInterface } from 'src/app/models/interfaces/contact.interface';
-import { ObjectId } from 'mongodb';
-import { Message } from 'src/app/models/message.entity';
-import { MessageInterface } from 'src/app/models/interfaces/message.interface';
+import { UserInterface } from 'src/app/entities/interfaces/user.interface';
+import { ContactInterface } from 'src/app/entities/interfaces/contact.interface';
+import { ObjectID } from 'mongodb';
+import { Message } from 'src/app/entities/message.entity';
+import { MessageInterface } from 'src/app/entities/interfaces/message.interface';
 
 @Injectable()
 export class UsersSeederService {
@@ -113,7 +113,7 @@ export class UsersSeederService {
         role: Role.User
       });
 
-      const roomId = new ObjectId();
+      const roomId = new ObjectID();
       let contacts: ContactInterface[] = [
         {
           userId: user._id,

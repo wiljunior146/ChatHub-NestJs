@@ -1,15 +1,14 @@
 import {
   ValidatorConstraint,
-  ValidatorConstraintInterface,
-  ValidationArguments
+  ValidatorConstraintInterface
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 import { REQUEST_CONTEXT } from '../../constants/request.constant';
-import { ObjectId } from 'mongodb';
+import { ObjectID } from 'mongodb';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Contact } from 'src/app/models/contact.entity';
+import { Contact } from 'src/app/entities/contact.entity';
 import { MongoRepository } from 'typeorm';
-import { Invitation } from 'src/app/models/invitation.entity';
+import { Invitation } from 'src/app/entities/invitation.entity';
 
 /**
  * Validation for the user creating a new invitation.
@@ -25,8 +24,10 @@ export class UserCanCreateInvitationRule implements ValidatorConstraintInterface
   ) {}
 
   async validate(value: string, validationArguments: any): Promise<boolean> {
-    const userId = new ObjectId(validationArguments.object[REQUEST_CONTEXT]);
-    const invitedUserId = new ObjectId(value);
+    if (! ObjectID.isValid(value)) return false;
+
+    const userId = new ObjectID(validationArguments.object[REQUEST_CONTEXT]);
+    const invitedUserId = new ObjectID(value);
     const totalContact = await this.contactsRepository.count({
       contactableId: invitedUserId,
       userId

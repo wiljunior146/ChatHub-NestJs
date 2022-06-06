@@ -1,11 +1,11 @@
-import { ObjectId } from 'mongodb';
+import { ObjectID } from 'mongodb';
 import { User } from '../user.entity';
 
 export interface InvitationInterface {
-  _id?: ObjectId;
-  userId?: ObjectId;
+  _id?: ObjectID;
+  userId?: ObjectID;
   user?: User;
-  invitedUserId?: ObjectId;
+  invitedUserId?: ObjectID;
   invitedUser?: User;
   createdAt?: Date;
   updatedAt?: Date;

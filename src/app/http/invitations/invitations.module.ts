@@ -4,14 +4,14 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailsModule } from 'src/app/mails/mails.module';
 import { MailsService } from 'src/app/mails/mails.service';
-import { Invitation } from 'src/app/models/invitation.entity';
-import { User } from 'src/app/models/user.entity';
+import { Invitation } from 'src/app/entities/invitation.entity';
+import { User } from 'src/app/entities/user.entity';
 import { InvitationsController } from './invitations.controller';
 import appConfig from 'src/config/app';
 import databaseConfig from 'src/config/database';
 import { InvitationsConsumer } from 'src/app/jobs/invitations.consumer';
 import { ContactsService } from 'src/app/http/contacts/contacts.service';
-import { Contact } from 'src/app/models/contact.entity';
+import { Contact } from 'src/app/entities/contact.entity';
 import { InvitationsService } from './invitations.service';
 import {
   UserExistsRule

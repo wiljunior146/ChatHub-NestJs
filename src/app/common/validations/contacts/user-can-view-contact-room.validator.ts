@@ -5,8 +5,8 @@ import {
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 import { REQUEST_CONTEXT } from '../../constants/request.constant';
-import { ObjectId } from 'mongodb';
-import { Contact } from 'src/app/models/contact.entity';
+import { ObjectID } from 'mongodb';
+import { Contact } from 'src/app/entities/contact.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 
@@ -22,11 +22,13 @@ export class UserCanViewContactRoomRule implements ValidatorConstraintInterface 
   ) {}
 
   async validate(value: string, validationArguments: any): Promise<boolean> {
+    if (! ObjectID.isValid(value)) return false;
+
     const userId = validationArguments.object[REQUEST_CONTEXT];
 
     const total = await this.contactsRepository.count({
-      roomId: new ObjectId(value),
-      userId: new ObjectId(userId)
+      roomId: new ObjectID(value),
+      userId: new ObjectID(userId)
     });
 
     return !!total;

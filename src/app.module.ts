@@ -7,16 +7,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ProfileModule } from './app/http/profile/profile.module';
 import { AuthModule } from './app/http/authentication/auth.module';
 import { UsersModule } from './app/http/users/users.module';
-import { User } from './app/models/user.entity';
 import { ContactsModule } from './app/http/contacts/contacts.module';
 import { MessagesModule } from './app/http/messages/messages.module';
-import { Message } from './app/models/message.entity';
-import { Contact } from './app/models/contact.entity';
 import appConfig from './config/app';
 import databaseConfig from './config/database';
 import queueConfig from './config/queue';
 import { BullModule } from '@nestjs/bull';
-import { Invitation } from './app/models/invitation.entity';
 
 @Module({
   imports: [
@@ -52,6 +48,7 @@ import { Invitation } from './app/models/invitation.entity';
         autoLoadEntities: true,
         synchronize: true,
         useNewUrlParser: true,
+        useUnifiedTopology: true,
         logging: true
       })
     }),

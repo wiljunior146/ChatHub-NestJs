@@ -5,8 +5,8 @@ import {
 } from 'class-validator';
 import { Injectable } from '@nestjs/common';
 import { REQUEST_CONTEXT } from 'src/app/common/constants/request.constant';
-import { ObjectId } from 'mongodb';
-import { User } from 'src/app/models/user.entity';
+import { ObjectID } from 'mongodb';
+import { User } from 'src/app/entities/user.entity';
 import { MongoRepository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -25,7 +25,7 @@ export class UserUniqueWithIgnoreRule implements ValidatorConstraintInterface {
     const userId = validationArguments.object[REQUEST_CONTEXT];
 
     const total = await this.usersRepository.count({
-      _id: { $ne: new ObjectId(userId) },
+      _id: { $ne: new ObjectID(userId) },
       [validationArguments.property]: value
     });
 

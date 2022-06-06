@@ -1,7 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../models/user.entity';
+import { User } from '../entities/user.entity';
 
 /**
  * We are using handlebars for templating our emails.

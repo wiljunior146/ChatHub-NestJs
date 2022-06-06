@@ -6,38 +6,41 @@ import {
 } from "@nestjs/common";
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError'
 import { Response } from 'express';
-import { BSONTypeError } from 'bson';
+import { InvalidObjectIdException } from "src/app/exceptions/invalid-object-id.exception";
 
 /**
  * This custom exception filter will catch every EntityNotFoundError
  * and return a proper response instead of internal server error since
  * nestJs doesn't have handler for TypeORM exceptions.
  * 
- * We will also include BSONTypeError since it throws an internal server error
- * if the passed mongodb Id is an invalid length or format for Object Id so we can assume
- * that it's also not found.
- * 
  * @note If we want to throw another exception if the entity is not found,
  *       we must not used the TypeORM methods that throws EntityNotFoundError by default.
  *       IE: findOneOrFail
  * 
  *       Like in authorization, we don't throw entity not found instead we throw unauthorized.
+ * 
+ * @note bson package that used by MongoDB version 3 throws the generic Error unlike the bson
+ *       package that version 4 used that throws a BSONTypeError exception.
+ *
+ *       Since catching the generic Error will catch everything including request exceptions,
+ *       we will create a new exception to throw if the id is not a valid ObjectID
+ *       but we need to do it manually.
+ *       IE: if (! ObjectID.isValid(id)) throw new InvalidObjectIdException();
+ * 
+ * @see  src/app/exceptions/invalid-object-id.exception.ts
  * @see  https://docs.nestjs.com/exception-filters
+ *       TypeOrm does not yet supported mongoDB version 4.
+ * @see  https://github.com/typeorm/typeorm - Installation Section.
  */
-@Catch(EntityNotFoundError, BSONTypeError)
+@Catch(EntityNotFoundError, InvalidObjectIdException)
 export class EntityNotFoundExceptionFilter implements ExceptionFilter {
 
   public catch(exception: any, host: ArgumentsHost) {
 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-
-    const statusCode = exception instanceof EntityNotFoundError || BSONTypeError
-      ? HttpStatus.NOT_FOUND
-      : HttpStatus.INTERNAL_SERVER_ERROR;
-    const message = exception.message
-      ? exception.message
-      : 'Something went wrong!';
+    const message = exception.message;
+    const statusCode = HttpStatus.NOT_FOUND;
 
     return response
       .status(statusCode)

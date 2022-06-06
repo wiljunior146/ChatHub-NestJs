@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ProfileController } from './profile.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/app/models/user.entity';
+import { User } from 'src/app/entities/user.entity';
 import {
   UserUniqueWithIgnoreRule
 } from 'src/app/common/validations/users/user-unique-with-ignore.validator';

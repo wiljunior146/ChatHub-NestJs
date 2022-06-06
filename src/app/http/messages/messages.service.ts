@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/app/models/user.entity';
-import { MongoRepository } from 'typeorm';
-import { Message } from '../../models/message.entity';
+import { User } from 'src/app/entities/user.entity';
+import { MongoRepository, ObjectID } from 'typeorm';
+import { Message } from '../../entities/message.entity';
 import { CreateMessageInterface } from './interfaces/create.interface';
 import { PaginateMessagesInterface } from './interfaces/paginate.interface';
 import { UpdateMessageInterface } from './interfaces/update.interface';
@@ -46,10 +46,10 @@ export class MessagesService {
 
   async update(
     user: User,
-    findOptions: any,
+    id: string | ObjectID,
     payload: UpdateMessageInterface
   ): Promise<Message> {
-    const message = await this.messagesRepository.findOneOrFail(findOptions);
+    const message = await this.messagesRepository.findOneOrFail(id);
 
     if (! message.userId.equals(user._id)) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
@@ -61,14 +61,14 @@ export class MessagesService {
     });
   }
 
-  async delete(user: User, findOptions: any): Promise<Message> {
-    const message = await this.messagesRepository.findOneOrFail(findOptions);
+  async delete(user: User, id: string | ObjectID): Promise<Message> {
+    const message = await this.messagesRepository.findOneOrFail(id);
 
     if (! message.userId.equals(user._id)) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
 
-    await this.messagesRepository.delete(findOptions);
+    await this.messagesRepository.delete(id);
     return message;
   }
 }

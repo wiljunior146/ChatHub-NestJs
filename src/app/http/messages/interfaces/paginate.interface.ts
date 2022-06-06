@@ -1,7 +1,7 @@
-import { ObjectId } from "mongodb";
+import { ObjectID } from "mongodb";
 
 export interface PaginateMessagesInterface {
   skip: number;
   limit: number;
-  roomId: ObjectId;
+  roomId: ObjectID;
 }

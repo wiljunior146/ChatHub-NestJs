@@ -15,11 +15,20 @@ import {
 } from './app/common/filters/entity-not-found-exception.filter';
 import helmet from 'helmet';
 import { join } from 'path';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
 
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  const documentBuilder = new DocumentBuilder()
+    .setTitle(config.get<string>('app.name'))
+    .setDescription('A simple chatting system.')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, documentBuilder);
+  SwaggerModule.setup('documentation', app, document);
 
   app.use('/static', express.static(join(__dirname, '..', 'src/static')));
   app.use(helmet());
@@ -41,7 +50,9 @@ async function bootstrap() {
     },
   }));
 
-  const port = app.get(ConfigService).get('app.port');
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
+  const port = config.get<number>('app.port');
   await app.listen(port);
 }
 

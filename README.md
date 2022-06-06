@@ -27,6 +27,9 @@
 ## Description
 A simple chatting system.
 
+## Major Packages
+
+
 ## Installation
 
 ```bash
@@ -44,7 +47,10 @@ Update .env values.
 
 ```bash
 # we are using mongodb as our database so it will automatically create the
-# database and collections base on our entities and database name on our config.
+# database and collections base on our entities and TypeOrmModule configuration.
+
+# since we are using mongodb the TypeOrm will only syncs just by creating indices
+# if the synchronize is true.
 
 $ yarn run seed
 ```

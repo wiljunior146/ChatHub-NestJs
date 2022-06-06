@@ -7,28 +7,28 @@ import {
   Column
 } from 'typeorm';
 import { ContactInterface } from './interfaces/contact.interface';
-import { User } from 'src/app/models/user.entity';
-import { ObjectId } from 'mongodb';
+import { User } from 'src/app/entities/user.entity';
+import { ObjectID } from 'mongodb';
 
 @Entity({ name: 'contacts' })
 export class Contact implements ContactInterface {
   @ObjectIdColumn()
-  _id: ObjectId;
+  _id: ObjectID;
 
   @Column()
-  userId?: ObjectId;
+  userId?: ObjectID;
 
   @ManyToOne(() => User, (user) => user.contacts)
   user: User;
 
   @Column()
-  contactableId?: ObjectId;
+  contactableId?: ObjectID;
 
   @ManyToOne(() => User, (user) => user.contactables)
   contactable: User;
 
   @Column()
-  roomId: ObjectId;
+  roomId: ObjectID;
 
   @CreateDateColumn()
   createdAt: Date;

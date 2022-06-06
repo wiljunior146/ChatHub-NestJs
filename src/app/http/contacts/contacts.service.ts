@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectId } from 'mongodb';
-import { ContactInterface } from 'src/app/models/interfaces/contact.interface';
-import { User } from 'src/app/models/user.entity';
+import { ObjectID } from 'mongodb';
+import { ContactInterface } from 'src/app/entities/interfaces/contact.interface';
+import { User } from 'src/app/entities/user.entity';
 import { MongoRepository } from 'typeorm';
-import { Contact } from '../../models/contact.entity';
+import { Contact } from '../../entities/contact.entity';
 import { PaginateContactsInterface } from './interfaces/paginate.interface';
 
 @Injectable()
@@ -43,13 +43,9 @@ export class ContactsService {
 
   /**
    * Display the specified resource.
-   * 
-   * @note Must not use specific type on parameter findOptions
-   *       like "findOptions: string | ObjectId" so we can still passed ObjectId
-   *       since ObjectID and ObjectId is not the same type.
    */
-  async show(user: User, findOptions: any): Promise<Contact> {
-    const contact = await this.contactsRepository.findOneOrFail(findOptions);
+  async show(user: User, id: string | ObjectID): Promise<Contact> {
+    const contact = await this.contactsRepository.findOneOrFail(id);
 
     if (! contact.userId.equals(user._id)) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
@@ -62,7 +58,7 @@ export class ContactsService {
    * Create contact between the inviter and the invited user.
    */
   async create(inviter: User, user: User): Promise<void> {
-    const roomId = new ObjectId();
+    const roomId = new ObjectID();
     let contacts: ContactInterface[] = [
       {
         userId: inviter._id,
