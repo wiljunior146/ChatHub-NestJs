@@ -15,7 +15,7 @@ import {
 } from './app/common/filters/entity-not-found-exception.filter';
 import helmet from 'helmet';
 import { join } from 'path';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,9 +26,12 @@ async function bootstrap() {
     .setDescription('A simple chatting system.')
     .setVersion('1.0')
     .build();
+  const customOptions: SwaggerCustomOptions = {
+    customSiteTitle: config.get<string>('app.name') +  ' API Documentation',
+  }
 
   const document = SwaggerModule.createDocument(app, documentBuilder);
-  SwaggerModule.setup('documentation', app, document);
+  SwaggerModule.setup('', app, document, customOptions);
 
   app.use('/static', express.static(join(__dirname, '..', 'src/static')));
   app.use(helmet());
@@ -47,7 +50,7 @@ async function bootstrap() {
     exceptionFactory: (validationErrors: ValidationError[] = []) => {
       const errors = validationErrors.map((value) => omit(value, 'target'));
       return new BadRequestException(errors);
-    },
+    }
   }));
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });

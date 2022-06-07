@@ -49,6 +49,11 @@ import { BullModule } from '@nestjs/bull';
         synchronize: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        writeConcern: {
+          w: 'majority',
+          j: true,
+          wtimeout: 15000
+        },
         logging: true
       })
     }),
@@ -67,4 +72,4 @@ import { BullModule } from '@nestjs/bull';
   ]
 })
 
-export class AppModule { }
+export class AppModule {}

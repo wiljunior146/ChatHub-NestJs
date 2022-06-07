@@ -5,7 +5,6 @@ import { MessageInterface } from 'src/app/entities/interfaces/message.interface'
 import { User } from 'src/app/entities/user.entity';
 import { UserResourceDto } from './user-resource.dto';
 
-@Injectable()
 export class MessageResourceDto implements MessageInterface {
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())

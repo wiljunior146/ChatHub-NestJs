@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { Role } from 'src/app/common/enums/role.enum';
 import { Exclude, Transform, Expose } from 'class-transformer';
 import { UserInterface } from 'src/app/entities/interfaces/user.interface';
 import { ObjectID } from 'mongodb';
 
-@Injectable()
 export class UserResourceDto implements UserInterface {
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())

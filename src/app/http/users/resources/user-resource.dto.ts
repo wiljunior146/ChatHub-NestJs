@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import { Role } from 'src/app/common/enums/role.enum';
 import { Exclude, Transform, Expose } from 'class-transformer';
 import { UserInterface } from 'src/app/entities/interfaces/user.interface';
 import { roleText } from 'src/app/entities/getters/user.getter';
 import { ObjectID } from 'mongodb';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
-@Injectable()
 export class UserResourceDto implements UserInterface {
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
@@ -23,6 +22,7 @@ export class UserResourceDto implements UserInterface {
 
   email: string;
 
+  @ApiHideProperty()
   @Exclude()
   password: string;
 

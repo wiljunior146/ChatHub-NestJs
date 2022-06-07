@@ -25,6 +25,8 @@ import { InjectRequest } from 'src/app/common/decorators/inject.request.decorato
 import { Request } from 'src/app/common/enums/request.enum';
 import { ObjectID } from 'mongodb';
 import { InvalidObjectIdException } from 'src/app/exceptions/invalid-object-id.exception';
+import { ApiExtraModels, ApiOkResponse, ApiResponse, getSchemaPath } from '@nestjs/swagger';
+import { PaginatedDto } from './responses/paginated.dto';
 
 @Roles(Role.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -35,6 +37,22 @@ export class UsersController {
   ) {}
 
   @Get()
+  @ApiOkResponse({
+    schema: {
+      allOf: [
+        { $ref: getSchemaPath(PaginatedDto) },
+        {
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: getSchemaPath(UserResourceDto) },
+            },
+          },
+        },
+      ],
+    },
+  })
+  @ApiExtraModels(PaginatedDto)
   @UseInterceptors(ClassSerializerInterceptor)
   async index(@Query() query: GetUsersRequestDto) {
     const { data, meta } = await this.usersService.paginate(query);

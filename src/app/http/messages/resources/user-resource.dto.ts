@@ -4,7 +4,6 @@ import { Exclude, Transform, Expose } from 'class-transformer';
 import { UserInterface } from 'src/app/entities/interfaces/user.interface';
 import { ObjectID } from 'mongodb';
 
-@Injectable()
 export class UserResourceDto implements UserInterface {
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())

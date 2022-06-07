@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { Match } from 'src/app/common/decorators/validations/common/match.decorator';
 import { UserUnique } from 'src/app/common/decorators/validations/users/user-unique.decorator';
