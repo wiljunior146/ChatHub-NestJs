@@ -23,7 +23,9 @@ import { CreateInvitationRequestDto } from './requests/create-invitation-request
 import { GetInvitationsRequestDto } from './requests/get-invitations-request.dto';
 import { InvitationResourceDto } from './resources/invitation-resource.dto';
 import { InvalidObjectIdException } from 'src/app/exceptions/invalid-object-id.exception';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Invitations')
 @Roles(Role.User)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('invitations')

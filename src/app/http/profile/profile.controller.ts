@@ -12,9 +12,11 @@ import { JwtAuthGuard } from 'src/app/common/guards/jwt-auth.guard';
 import { UpdateProfileRequestDto } from './requests/update-profile-request.dto';
 import { UpdatePasswordRequestDto } from './requests/update-password-request.dto';
 import { InjectUserToBody } from 'src/app/common/decorators/inject.user.decorator';
-import { UserResourceDto } from './resources/user-resource.dto';
+import { ProfileResourceDto } from './resources/profile-resource.dto';
 import { UsersService } from '../users/users.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Profile')
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly usersService: UsersService) {}
@@ -23,7 +25,7 @@ export class ProfileController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   index(@Request() req) {
-    return new UserResourceDto(req.user);
+    return new ProfileResourceDto(req.user);
   }
 
   @Put()
@@ -35,7 +37,7 @@ export class ProfileController {
     @Request() req
   ) {
     const user = await this.usersService.update(req.user._id, body);
-    return new UserResourceDto(user);
+    return new ProfileResourceDto(user);
   }
 
   @Put('password')

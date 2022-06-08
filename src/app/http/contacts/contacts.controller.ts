@@ -17,7 +17,9 @@ import { ContactsService } from './contacts.service';
 import { GetContactsRequestDto } from './requests/get-contacts-request.dto';
 import { ContactResourceDto } from './resources/contact-resource.dto';
 import { ObjectID } from  'mongodb';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Contacts')
 @Roles(Role.User)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('contacts')

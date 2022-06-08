@@ -25,11 +25,14 @@ import { InjectRequest } from 'src/app/common/decorators/inject.request.decorato
 import { Request } from 'src/app/common/enums/request.enum';
 import { ObjectID } from 'mongodb';
 import { InvalidObjectIdException } from 'src/app/exceptions/invalid-object-id.exception';
-import { ApiExtraModels, ApiOkResponse, ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import { PaginatedDto } from './responses/paginated.dto';
+import { ApiExtraModels, ApiOkResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { PaginatedResponseDto } from 'src/app/common/responses/paginated-response.dto';
+import { ApiPaginatedResponse } from 'src/app/common/decorators/paginated.decorator';
 
+@ApiTags('Users')
 @Roles(Role.Admin)
 @UseGuards(JwtAuthGuard, RolesGuard)
+@ApiExtraModels(() => PaginatedResponseDto)
 @Controller('admin/users')
 export class UsersController {
   constructor(
@@ -37,22 +40,7 @@ export class UsersController {
   ) {}
 
   @Get()
-  @ApiOkResponse({
-    schema: {
-      allOf: [
-        { $ref: getSchemaPath(PaginatedDto) },
-        {
-          properties: {
-            data: {
-              type: 'array',
-              items: { $ref: getSchemaPath(UserResourceDto) },
-            },
-          },
-        },
-      ],
-    },
-  })
-  @ApiExtraModels(PaginatedDto)
+  @ApiPaginatedResponse(UserResourceDto)
   @UseInterceptors(ClassSerializerInterceptor)
   async index(@Query() query: GetUsersRequestDto) {
     const { data, meta } = await this.usersService.paginate(query);

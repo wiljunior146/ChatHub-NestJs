@@ -6,6 +6,7 @@ import { ObjectID } from 'mongodb';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 export class UserResourceDto implements UserInterface {
+  @ApiProperty({ name: 'id', type: String })
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
   _id: ObjectID;
@@ -14,6 +15,8 @@ export class UserResourceDto implements UserInterface {
 
   lastName: string;
 
+  @ApiProperty()
+  @Expose()
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
@@ -26,6 +29,7 @@ export class UserResourceDto implements UserInterface {
   @Exclude()
   password: string;
 
+  @ApiProperty({ type: String })
   @Transform(roleText)
   role: Role;
 

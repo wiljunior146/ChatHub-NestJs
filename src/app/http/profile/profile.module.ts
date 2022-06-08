@@ -7,8 +7,6 @@ import {
 } from 'src/app/common/validations/users/user-unique-with-ignore.validator';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
-import { ConfigModule } from '@nestjs/config';
-import appConfig from 'src/config/app';
 
 @Module({
   imports: [

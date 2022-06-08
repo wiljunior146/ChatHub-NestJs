@@ -25,13 +25,20 @@ async function bootstrap() {
     .setTitle(config.get<string>('app.name'))
     .setDescription('A simple chatting system.')
     .setVersion('1.0')
+    .addTag('Authentication')
+    .addTag('Profile')
+    .addTag('Contacts')
+    .addTag('Invitations')
+    .addTag('Messages')
+    .addTag('Profile')
+    .addTag('Users')
     .build();
   const customOptions: SwaggerCustomOptions = {
     customSiteTitle: config.get<string>('app.name') +  ' API Documentation',
   }
 
   const document = SwaggerModule.createDocument(app, documentBuilder);
-  SwaggerModule.setup('', app, document, customOptions);
+  SwaggerModule.setup('/docs', app, document, customOptions);
 
   app.use('/static', express.static(join(__dirname, '..', 'src/static')));
   app.use(helmet());

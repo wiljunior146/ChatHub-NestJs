@@ -12,6 +12,7 @@ import { Contact } from 'src/app/entities/contact.entity';
 import { UserInterface } from './interfaces/user.interface';
 import { ObjectID } from 'mongodb';
 import { Invitation } from './invitation.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'users' })
 export class User implements UserInterface {

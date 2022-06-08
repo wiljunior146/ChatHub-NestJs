@@ -17,6 +17,28 @@ export class UpdateUserRequestDto extends PickType(
   ['firstName', 'lastName'] as const
 ) {
   @IsNotEmpty({
+    message: 'The first name is required.'
+  })
+  @IsString({
+    message: 'The first name must be a string.'
+  })
+  @MaxLength(255, {
+    message: 'The first name must not be greater than $constraint1 characters.'
+  })
+  firstName: string;
+
+  @IsNotEmpty({
+    message: 'The last name is required.'
+  })
+	@IsString({
+    message: 'The last name must be a string.'
+  })
+  @MaxLength(255, {
+    message: 'The last name must not be greater than $constraint1 characters.'
+  })
+  lastName: string;
+
+  @IsNotEmpty({
     message: 'The username is required.'
   })
   @IsString({

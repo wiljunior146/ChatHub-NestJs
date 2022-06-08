@@ -8,12 +8,21 @@ import {
   UserCanViewContactRoomRule
 } from 'src/app/common/validations/contacts/user-can-view-contact-room.validator';
 import { ContactsService } from 'src/app/http/contacts/contacts.service';
+import { User } from 'src/app/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message, Contact])
+    TypeOrmModule.forFeature([
+      Message,
+      Contact,
+      User
+    ])
   ],
   controllers: [MessagesController],
-  providers: [MessagesService, ContactsService, UserCanViewContactRoomRule]
+  providers: [
+    MessagesService,
+    ContactsService,
+    UserCanViewContactRoomRule
+  ]
 })
 export class MessagesModule {}

@@ -2,7 +2,7 @@ import { Transform, Expose, Exclude } from 'class-transformer';
 import { ObjectID } from 'mongodb';
 import { MessageInterface } from 'src/app/entities/interfaces/message.interface';
 import { User } from 'src/app/entities/user.entity';
-import { UserResourceDto } from './user-resource.dto';
+import { InvitationUserResourceDto } from './invitation-user-resource.dto';
 
 export class InvitationResourceDto implements MessageInterface {
   @Expose({ name: 'id' })
@@ -12,13 +12,13 @@ export class InvitationResourceDto implements MessageInterface {
   @Transform(({ value }) => value.toString())
   userId: ObjectID;
 
-  @Transform(({ value }) => new UserResourceDto(value))
+  @Transform(({ value }) => new InvitationUserResourceDto(value))
   user: User;
 
   @Transform(({ value }) => value.toString())
   invitedUserId: ObjectID;
 
-  @Transform(({ value }) => new UserResourceDto(value))
+  @Transform(({ value }) => new InvitationUserResourceDto(value))
   invitedUser: User;
 
   createdAt: Date;

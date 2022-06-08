@@ -11,7 +11,9 @@ import { PaginateContactsInterface } from './interfaces/paginate.interface';
 export class ContactsService {
   constructor(
     @InjectRepository(Contact)
-    private readonly contactsRepository: MongoRepository<Contact>
+    private readonly contactsRepository: MongoRepository<Contact>,
+    @InjectRepository(User)
+    private readonly usersRepository: MongoRepository<User>
   ) {}
 
   async paginate(
@@ -51,7 +53,9 @@ export class ContactsService {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
 
-    return contact;
+    const contactable = await this.usersRepository.findOne(contact.contactableId);
+
+    return {...contact, contactable};
   }
 
   /**

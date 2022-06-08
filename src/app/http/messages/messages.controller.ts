@@ -27,7 +27,9 @@ import {
   InjectUserToQuery
 } from 'src/app/common/decorators/inject.user.decorator';
 import { InvalidObjectIdException } from 'src/app/exceptions/invalid-object-id.exception';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Messages')
 @Roles(Role.User)
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('messages')

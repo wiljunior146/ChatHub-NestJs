@@ -1,9 +1,12 @@
 import { Role } from 'src/app/common/enums/role.enum';
 import { Exclude, Transform, Expose } from 'class-transformer';
 import { UserInterface } from 'src/app/entities/interfaces/user.interface';
+import { roleText } from 'src/app/entities/getters/user.getter';
 import { ObjectID } from 'mongodb';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
-export class UserResourceDto implements UserInterface {
+export class ProfileResourceDto implements UserInterface {
+  @ApiProperty({ name: 'id', type: String })
   @Expose({ name: 'id' })
   @Transform(({ value }) => value.toString())
   _id: ObjectID;
@@ -12,6 +15,8 @@ export class UserResourceDto implements UserInterface {
 
   lastName: string;
 
+  @ApiProperty()
+  @Expose()
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
@@ -20,19 +25,18 @@ export class UserResourceDto implements UserInterface {
 
   email: string;
 
+  @ApiHideProperty()
   @Exclude()
   password: string;
 
-  @Exclude()
+  @Transform(roleText)
   role: Role;
 
-  @Exclude()
   createdAt: Date;
 
-  @Exclude()
   updatedAt: Date;
 
-  constructor(partial: Partial<UserResourceDto>) {
+  constructor(partial: Partial<ProfileResourceDto>) {
     Object.assign(this, partial);
   }
 }

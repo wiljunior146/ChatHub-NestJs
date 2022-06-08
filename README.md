@@ -27,9 +27,6 @@
 ## Description
 A simple chatting system.
 
-## Major Packages
-
-
 ## Installation
 
 ```bash
@@ -68,6 +65,10 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+## API Documentation
+
+Open the browser and go to `<APP_URL>`/docs.
+
 ## Test
 
 ```bash
@@ -80,6 +81,20 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+## Note
+
+`For Swagger`
+```
+The name of all DTO classes including entities must be unique because it will
+confused the Swagger even if the path or the imported class is not the same
+as long as the class name is the same.
+
+If the swagger dectected another DTO class with the same name it will
+still use the schema of the first one that is already fetched for the whole project.
+```
+
+- - - -
 
 ## Support
 
