@@ -43,10 +43,13 @@ Update .env values.
 ## Seeding data
 
 ```bash
-# we are using mongodb as our database so it will automatically create the
-# database and collections base on our entities and TypeOrmModule configuration.
+# TypeORM automatically create the database and collections base
+# on our entities if the synchronize is true.
 
-# since we are using mongodb the TypeOrm will only syncs just by creating indices
+# It is unsafe to use synchronize: true for schema synchronization
+# on production once you get data in your database.
+
+# Since we are using mongodb the TypeORM will only syncs just by creating indices
 # if the synchronize is true.
 
 $ yarn run seed

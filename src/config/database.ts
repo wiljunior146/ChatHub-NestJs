@@ -14,5 +14,12 @@ export default registerAs('database', () => ({
    * 
    * @type {string}
    */
-  database: process.env.DB_DATABASE
+  database: process.env.DB_DATABASE,
+
+  /**
+   * TypeORM database synchronization.
+   * 
+   * @type {boolean}
+   */
+  synchronize: process.env.DB_SYNCHRONIZE == 'true'
 }));

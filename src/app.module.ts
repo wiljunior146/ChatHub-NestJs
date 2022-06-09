@@ -13,6 +13,7 @@ import appConfig from './config/app';
 import databaseConfig from './config/database';
 import queueConfig from './config/queue';
 import { BullModule } from '@nestjs/bull';
+import { Environment } from './app/common/enums/environment.enum';
 
 @Module({
   imports: [
@@ -46,7 +47,7 @@ import { BullModule } from '@nestjs/bull';
         database: config.get<string>('database.database'),
         url: config.get<string>('database.connection'),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: config.get<boolean>('database.synchronize'),
         useNewUrlParser: true,
         useUnifiedTopology: true,
         writeConcern: {
