@@ -25,7 +25,7 @@
 # ChatHub
 
 ## Description
-A simple chatting system.
+A simple chatting system.d
 
 ## Installation
 
