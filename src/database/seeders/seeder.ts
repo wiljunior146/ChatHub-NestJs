@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Environment } from 'src/app/common/enums/environment.enum';
-import { Contact } from 'src/app/entities/contact.entity';
-import { Invitation } from 'src/app/entities/invitation.entity';
-import { Message } from 'src/app/entities/message.entity';
-import { User } from 'src/app/entities/user.entity';
+import { Environment } from 'src/common/enums/environment.enum';
+import { Contact } from 'src/models/contacts/entities/contact.entity';
+import { Invitation } from 'src/models/invitations/entities/invitation.entity';
+import { Message } from 'src/models/messages/entities/message.entity';
+import { User } from 'src/models/users/entities/user.entity';
 import { MongoRepository } from 'typeorm';
 import { UsersSeederService } from './users/users-seeder.service';
 

@@ -1,67 +1,45 @@
-import { InvitationsModule } from './app/http/invitations/invitations.module';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ProfileModule } from './app/http/profile/profile.module';
-import { AuthModule } from './app/http/authentication/auth.module';
-import { UsersModule } from './app/http/users/users.module';
-import { ContactsModule } from './app/http/contacts/contacts.module';
-import { MessagesModule } from './app/http/messages/messages.module';
+import { BullModule } from '@nestjs/bull';
+import { TypeOrmConfigService } from './providers/type-orm-config.service';
+import { ThrottlerConfigService } from './providers/throttler-config.service';
+import { BullConfigService } from './providers/bull-config.service';
+import { UsersModule } from './models/users/users.module';
+import { MessagesModule } from './models/messages/messages.module';
+import { ContactsModule } from './models/contacts/contacts.module';
+import { InvitationsModule } from './models/invitations/invitations.module';
 import appConfig from './config/app';
 import databaseConfig from './config/database';
 import queueConfig from './config/queue';
-import { BullModule } from '@nestjs/bull';
-import { Environment } from './app/common/enums/environment.enum';
+import routerConfig from './config/router';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig, databaseConfig, queueConfig]
+      load: [
+        appConfig,
+        routerConfig,
+        databaseConfig,
+        queueConfig
+      ]
     }),
     BullModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        redis: {
-          host: config.get<string>('queue.host'),
-          port: config.get<number>('queue.port'),
-          password: config.get<string>('queue.password')
-        }
-      })
+      imports: [ConfigModule.forFeature(queueConfig)],
+      useClass: BullConfigService
     }),
     ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        ttl: config.get<number>('app.rateLimiting.ttl'),
-        limit: config.get<number>('app.rateLimiting.limit')
-      })
+      imports: [ConfigModule.forFeature(routerConfig)],
+      useClass: ThrottlerConfigService
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'mongodb',
-        database: config.get<string>('database.database'),
-        url: config.get<string>('database.connection'),
-        autoLoadEntities: true,
-        synchronize: config.get<boolean>('database.synchronize'),
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        writeConcern: {
-          w: 'majority',
-          j: true,
-          wtimeout: 15000
-        },
-        logging: true
-      })
+      imports: [ConfigModule.forFeature(databaseConfig)],
+      useClass: TypeOrmConfigService
     }),
-    AuthModule,
     UsersModule,
     MessagesModule,
-    ProfileModule,
     ContactsModule,
     InvitationsModule
   ],

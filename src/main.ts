@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import {
   EntityNotFoundExceptionFilter
-} from './app/common/filters/entity-not-found-exception.filter';
+} from './common/filters/entity-not-found-exception.filter';
 import helmet from 'helmet';
 import { join } from 'path';
 import { DocumentBuilder, SwaggerCustomOptions, SwaggerModule } from '@nestjs/swagger';

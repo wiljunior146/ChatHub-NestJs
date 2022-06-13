@@ -1,19 +1,15 @@
 import { MongoRepository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/app/entities/user.entity';
-import { Contact } from 'src/app/entities/contact.entity';
-import { Role } from 'src/app/common/enums/role.enum';
+import { User } from 'src/models/users/entities/user.entity';
+import { Contact } from 'src/models/contacts/entities/contact.entity';
+import { Message } from 'src/models/messages/entities/message.entity';
+import { Role } from 'src/common/enums/role.enum';
 import { faker } from '@faker-js/faker';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
-import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
+import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
 import * as bcrypt from 'bcrypt';
-import { UserInterface } from 'src/app/entities/interfaces/user.interface';
-import { ContactInterface } from 'src/app/entities/interfaces/contact.interface';
-import { ObjectID } from 'mongodb';
-import { Message } from 'src/app/entities/message.entity';
-import { MessageInterface } from 'src/app/entities/interfaces/message.interface';
 
 @Injectable()
 export class UsersSeederService {
@@ -35,7 +31,7 @@ export class UsersSeederService {
   async admin () {
     Logger.warn('Seeding admin.');
 
-    await this.usersRepository.save(<UserInterface>{
+    await this.usersRepository.save(<any>{
       firstName: 'wilson',
       lastName: 'jalipa',
       username: 'wilson123',
@@ -60,7 +56,7 @@ export class UsersSeederService {
       this.config.get<string>('app.password'),
       SALT_OR_ROUNDS
     );
-    let staffs: UserInterface[] = [];
+    let staffs: any[] = [];
 
     for (let i = 0; i < totalStaffs; i++) {
       staffs.push({
@@ -94,7 +90,7 @@ export class UsersSeederService {
       SALT_OR_ROUNDS
     );
 
-    const user = await this.usersRepository.save(<UserInterface> {
+    const user: any = await this.usersRepository.save(<any> {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       username: faker.unique(faker.internet.userName),
@@ -104,7 +100,7 @@ export class UsersSeederService {
     });
 
     for (let i = 0; i < totalContacts; i++) {
-      const contactable = await this.usersRepository.save(<UserInterface> {
+      const contactable: any = await this.usersRepository.save(<any> {
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         username: faker.unique(faker.internet.userName),
@@ -113,18 +109,18 @@ export class UsersSeederService {
         role: Role.User
       });
 
-      const roomId = new ObjectID();
-      let contacts: ContactInterface[] = [
+      const roomId = 'xxxx';
+      let contacts: any[] = [
         {
-          userId: user._id,
-          contactableId: contactable._id,
+          userId: user.id,
+          contactableId: contactable.id,
           roomId,
           createdAt: new Date,
           updatedAt: new Date
         },
         {
-          userId: contactable._id,
-          contactableId: user._id,
+          userId: contactable.id,
+          contactableId: user.id,
           roomId,
           createdAt: new Date,
           updatedAt: new Date
@@ -133,12 +129,12 @@ export class UsersSeederService {
       
       await this.contactsRepository.insertMany(contacts);
 
-      let messages: MessageInterface[] =  [];
+      let messages: any[] =  [];
 
       for (let i = 0; i < 5; i++) {
         messages.push({
           content: faker.lorem.text(),
-          userId: i % 2 == 0 ? user._id : contactable._id,
+          userId: i % 2 == 0 ? user.id : contactable.id,
           roomId,
           createdAt: new Date,
           updatedAt: new Date

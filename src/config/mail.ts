@@ -39,7 +39,7 @@ export default registerAs('mail', () => ({
      * Mail "From" address.
      * 
      * @example admin@example.com
-     * @type    {String}
+     * @type {String}
      */
     address: process.env.MAIL_FROM_ADDRESS,
 

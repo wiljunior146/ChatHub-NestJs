@@ -2,12 +2,32 @@ import { registerAs } from '@nestjs/config'
 
 export default registerAs('database', () => ({
   /**
-   * Mongodb connection string.
+   * Database host.
    *
-   * @example mongodb://localhost/nest
-   * @type    {String}
+   * @type {String}
    */
-  connection: process.env.DB_CONNECTION,
+  host: process.env.DB_HOST,
+
+  /**
+   * Database port.
+   *
+   * @type {Number}
+   */
+  port: parseInt(process.env.DB_PORT),
+
+  /**
+   * Database username.
+   *
+   * @type {String}
+   */
+  username: process.env.DB_USERNAME,
+
+  /**
+   * Database password.
+   *
+   * @type {String}
+   */
+  password: process.env.DB_PASSWORD,
 
   /**
    * Database name.
