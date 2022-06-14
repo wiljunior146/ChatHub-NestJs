@@ -1,4 +1,4 @@
-import routerConfig from '../config/router';
+import routerConfig from '../config/router.config';
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigType } from '@nestjs/config';
 import { ThrottlerModuleOptions, ThrottlerOptionsFactory } from '@nestjs/throttler';
@@ -7,13 +7,13 @@ import { ThrottlerModuleOptions, ThrottlerOptionsFactory } from '@nestjs/throttl
 export class ThrottlerConfigService implements ThrottlerOptionsFactory {
   constructor(
     @Inject(routerConfig.KEY)
-    private config: ConfigType<typeof routerConfig>,
+    private routerConfiguration: ConfigType<typeof routerConfig>,
   ) {}
 
   createThrottlerOptions(): ThrottlerModuleOptions {
     return {
-      ttl: this.config.ttl,
-      limit: this.config.limit
+      ttl: this.routerConfiguration.ttl,
+      limit: this.routerConfiguration.limit
     };
   }
 }

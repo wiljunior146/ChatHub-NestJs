@@ -7,7 +7,7 @@ import { Message } from 'src/models/messages/entities/message.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Contact } from 'src/models/contacts/entities/contact.entity';
 import { Seeder } from './seeder';
-import databaseConfig from 'src/config/database';
+import databaseConfig from 'src/config/database.config';
 import { Invitation } from 'src/models/invitations/entities/invitation.entity';
 
 @Module({

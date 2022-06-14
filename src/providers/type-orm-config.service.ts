@@ -1,4 +1,4 @@
-import databaseConfig from '../config/database';
+import databaseConfig from '../config/database.config';
 import { Inject, Injectable } from "@nestjs/common";
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
 import { ConfigType } from '@nestjs/config';
@@ -7,18 +7,18 @@ import { ConfigType } from '@nestjs/config';
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(
     @Inject(databaseConfig.KEY)
-    private dbConfig: ConfigType<typeof databaseConfig>,
+    private databaseConfiguration: ConfigType<typeof databaseConfig>,
   ) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
-      host: this.dbConfig.host,
-      port: this.dbConfig.port,
-      username: this.dbConfig.username,
-      password: this.dbConfig.password,
-      database: this.dbConfig.database,
-      synchronize: this.dbConfig.synchronize,
+      host: this.databaseConfiguration.host,
+      port: this.databaseConfiguration.port,
+      username: this.databaseConfiguration.username,
+      password: this.databaseConfiguration.password,
+      database: this.databaseConfiguration.database,
+      synchronize: this.databaseConfiguration.synchronize,
       autoLoadEntities: true
     };
   }

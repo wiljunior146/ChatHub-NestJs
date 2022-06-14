@@ -1,15 +1,16 @@
 import { MongoRepository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/models/users/entities/user.entity';
 import { Contact } from 'src/models/contacts/entities/contact.entity';
 import { Message } from 'src/models/messages/entities/message.entity';
 import { Role } from 'src/common/enums/role.enum';
 import { faker } from '@faker-js/faker';
-import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
 import * as bcrypt from 'bcrypt';
+import appConfig from 'src/config/app.config';
+import { ConfigType } from '@nestjs/config';
 
 @Injectable()
 export class UsersSeederService {
@@ -20,7 +21,8 @@ export class UsersSeederService {
     private contactsRepository: MongoRepository<Contact>,
     @InjectRepository(Message)
     private messagesRepository: MongoRepository<Message>,
-    private config: ConfigService
+    @Inject(appConfig.KEY)
+    private appConfiguration: ConfigType<typeof appConfig>,
   ) {}
 
   /**
@@ -36,7 +38,7 @@ export class UsersSeederService {
       lastName: 'jalipa',
       username: 'wilson123',
       email: 'wiljunior146@gmail.com',
-      password: await bcrypt.hash(this.config.get<string>('app.password'), SALT_OR_ROUNDS),
+      password: await bcrypt.hash(this.appConfiguration.password, SALT_OR_ROUNDS),
       role: Role.Admin
     });
 
@@ -53,7 +55,7 @@ export class UsersSeederService {
     Logger.warn('Seeding staffs.');
 
     const password: string = await bcrypt.hash(
-      this.config.get<string>('app.password'),
+      this.appConfiguration.password,
       SALT_OR_ROUNDS
     );
     let staffs: any[] = [];
@@ -86,7 +88,7 @@ export class UsersSeederService {
     Logger.warn(`Seeding users with contacts and messages.`);
 
     const password: string = await bcrypt.hash(
-      this.config.get<string>('app.password'),
+      this.appConfiguration.password,
       SALT_OR_ROUNDS
     );
 

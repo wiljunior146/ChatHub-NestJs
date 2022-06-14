@@ -54,10 +54,14 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
+    transform: true,
+    transformOptions: {
+      enableImplicitConversion: true,
+    },
     exceptionFactory: (validationErrors: ValidationError[] = []) => {
       const errors = validationErrors.map((value) => omit(value, 'target'));
       return new BadRequestException(errors);
-    }
+    },
   }));
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });

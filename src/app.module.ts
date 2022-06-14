@@ -11,10 +11,10 @@ import { UsersModule } from './models/users/users.module';
 import { MessagesModule } from './models/messages/messages.module';
 import { ContactsModule } from './models/contacts/contacts.module';
 import { InvitationsModule } from './models/invitations/invitations.module';
-import appConfig from './config/app';
-import databaseConfig from './config/database';
-import queueConfig from './config/queue';
-import routerConfig from './config/router';
+import appConfig from './config/app.config';
+import databaseConfig from './config/database.config';
+import queueConfig from './config/queue.config';
+import routerConfig from './config/router.config';
 
 @Module({
   imports: [

@@ -16,7 +16,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     ports:
-      - "8080:80"
+      - "8040:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@chathub.com
       PGADMIN_DEFAULT_PASSWORD: chathub123
