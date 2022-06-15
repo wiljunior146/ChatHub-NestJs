@@ -1,30 +1,29 @@
-import { MongoRepository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/app/models/user.entity';
-import { Contact } from 'src/app/models/contact.entity';
-import { Role } from 'src/app/common/enums/role.enum';
+import { User } from 'src/models/users/entities/user.entity';
+import { Contact } from 'src/models/contacts/entities/contact.entity';
+import { Message } from 'src/models/messages/entities/message.entity';
+import { Role } from 'src/common/enums/role.enum';
 import { faker } from '@faker-js/faker';
-import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
-import { SALT_OR_ROUNDS } from 'src/app/common/constants/app.constant';
+import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
 import * as bcrypt from 'bcrypt';
-import { UserInterface } from 'src/app/models/interfaces/user.interface';
-import { ContactInterface } from 'src/app/models/interfaces/contact.interface';
-import { ObjectId } from 'mongodb';
-import { Message } from 'src/app/models/message.entity';
-import { MessageInterface } from 'src/app/models/interfaces/message.interface';
+import appConfig from 'src/config/app.config';
+import { ConfigType } from '@nestjs/config';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UsersSeederService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: MongoRepository<User>,
+    private usersRepository: Repository<User>,
     @InjectRepository(Contact)
-    private contactsRepository: MongoRepository<Contact>,
+    private contactsRepository: Repository<Contact>,
     @InjectRepository(Message)
-    private messagesRepository: MongoRepository<Message>,
-    private config: ConfigService
+    private messagesRepository: Repository<Message>,
+    @Inject(appConfig.KEY)
+    private appConfiguration: ConfigType<typeof appConfig>,
   ) {}
 
   /**
@@ -35,12 +34,12 @@ export class UsersSeederService {
   async admin () {
     Logger.warn('Seeding admin.');
 
-    await this.usersRepository.save(<UserInterface>{
+    await this.usersRepository.save(<any>{
       firstName: 'wilson',
       lastName: 'jalipa',
       username: 'wilson123',
       email: 'wiljunior146@gmail.com',
-      password: await bcrypt.hash(this.config.get<string>('app.password'), SALT_OR_ROUNDS),
+      password: await bcrypt.hash(this.appConfiguration.password, SALT_OR_ROUNDS),
       role: Role.Admin
     });
 
@@ -57,10 +56,10 @@ export class UsersSeederService {
     Logger.warn('Seeding staffs.');
 
     const password: string = await bcrypt.hash(
-      this.config.get<string>('app.password'),
+      this.appConfiguration.password,
       SALT_OR_ROUNDS
     );
-    let staffs: UserInterface[] = [];
+    let staffs: any[] = [];
 
     for (let i = 0; i < totalStaffs; i++) {
       staffs.push({
@@ -73,7 +72,7 @@ export class UsersSeederService {
       });
     }
 
-    await this.usersRepository.insertMany(staffs);
+    await this.usersRepository.insert(staffs);
 
     Logger.log('Done seeding staffs.');
   }
@@ -90,11 +89,11 @@ export class UsersSeederService {
     Logger.warn(`Seeding users with contacts and messages.`);
 
     const password: string = await bcrypt.hash(
-      this.config.get<string>('app.password'),
+      this.appConfiguration.password,
       SALT_OR_ROUNDS
     );
 
-    const user = await this.usersRepository.save(<UserInterface> {
+    const user: any = await this.usersRepository.save(<any> {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       username: faker.unique(faker.internet.userName),
@@ -104,7 +103,7 @@ export class UsersSeederService {
     });
 
     for (let i = 0; i < totalContacts; i++) {
-      const contactable = await this.usersRepository.save(<UserInterface> {
+      const contactable: any = await this.usersRepository.save(<any> {
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         username: faker.unique(faker.internet.userName),
@@ -113,39 +112,39 @@ export class UsersSeederService {
         role: Role.User
       });
 
-      const roomId = new ObjectId();
-      let contacts: ContactInterface[] = [
+      const roomId = uuidv4();
+      let contacts: any[] = [
         {
-          userId: user._id,
-          contactableId: contactable._id,
+          userId: user.id,
+          contactableId: contactable.id,
           roomId,
           createdAt: new Date,
           updatedAt: new Date
         },
         {
-          userId: contactable._id,
-          contactableId: user._id,
+          userId: contactable.id,
+          contactableId: user.id,
           roomId,
           createdAt: new Date,
           updatedAt: new Date
         }
       ];
       
-      await this.contactsRepository.insertMany(contacts);
+      await this.contactsRepository.insert(contacts);
 
-      let messages: MessageInterface[] =  [];
+      let messages: any[] =  [];
 
       for (let i = 0; i < 5; i++) {
         messages.push({
           content: faker.lorem.text(),
-          userId: i % 2 == 0 ? user._id : contactable._id,
+          userId: i % 2 == 0 ? user.id : contactable.id,
           roomId,
           createdAt: new Date,
           updatedAt: new Date
         });
       }
 
-      this.messagesRepository.insertMany(messages);
+      this.messagesRepository.insert(messages);
     }
 
     Logger.log(`Done seeding users with contacts and messages.`);

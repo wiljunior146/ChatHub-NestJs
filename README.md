@@ -25,7 +25,7 @@
 # ChatHub
 
 ## Description
-A simple chatting system.
+A simple chatting system.d
 
 ## Installation
 
@@ -43,8 +43,14 @@ Update .env values.
 ## Seeding data
 
 ```bash
-# we are using mongodb as our database so it will automatically create the
-# database and collections base on our entities and database name on our config.
+# TypeORM automatically create the database and collections base
+# on our entities if the synchronize is true.
+
+# It is unsafe to use synchronize: true for schema synchronization
+# on production once you get data in your database.
+
+# Since we are using mongodb the TypeORM will only syncs just by creating indices
+# if the synchronize is true.
 
 $ yarn run seed
 ```
@@ -62,6 +68,10 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+## API Documentation
+
+Open the browser and go to `<APP_URL>`/docs.
+
 ## Test
 
 ```bash
@@ -74,6 +84,20 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+## Note
+
+`For Swagger`
+```
+The name of all DTO classes including entities must be unique because it will
+confused the Swagger even if the path or the imported class is not the same
+as long as the class name is the same.
+
+If the swagger dectected another DTO class with the same name it will
+still use the schema of the first one that is already fetched for the whole project.
+```
+
+- - - -
 
 ## Support
 

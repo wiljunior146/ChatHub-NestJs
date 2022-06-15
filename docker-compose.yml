@@ -1,0 +1,23 @@
+version: "3.1"
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: chathub
+      POSTGRES_PASSWORD: chathub123
+      POSTGRES_DB: chathub
+
+  # Use host.docker.internal as host instead of localhost on connecting to postgres.
+  pgadmin4:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8040:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@chathub.com
+      PGADMIN_DEFAULT_PASSWORD: chathub123
