@@ -58,7 +58,6 @@ export class UsersService {
    */
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.usersRepository.findOneOrFail(id);
-    console.log(user);
     if (user.role === Role.Admin) {
       throw new ForbiddenException('The selected user is an admin.');
     }

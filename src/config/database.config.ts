@@ -13,7 +13,7 @@ export default registerAs('database', () => ({
    *
    * @type {Number}
    */
-  port: parseInt(process.env.DB_PORT),
+  port: +process.env.DB_PORT,
 
   /**
    * Database username.

@@ -14,10 +14,11 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserResourceDto } from './dto/user-resource.dto';
 import { User } from './entities/user.entity';
 import { GetUsersDto } from './dto/get-users.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Users')
 @Controller('admin/users')
 export class UsersController {
   constructor(

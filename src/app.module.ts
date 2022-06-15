@@ -15,6 +15,7 @@ import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import queueConfig from './config/queue.config';
 import routerConfig from './config/router.config';
+import { AuthModule } from './authentication/auth.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import routerConfig from './config/router.config';
       imports: [ConfigModule.forFeature(databaseConfig)],
       useClass: TypeOrmConfigService
     }),
+    AuthModule,
     UsersModule,
     MessagesModule,
     ContactsModule,

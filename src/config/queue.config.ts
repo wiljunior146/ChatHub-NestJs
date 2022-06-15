@@ -13,7 +13,7 @@ export default registerAs('queue', () => ({
    * 
    * @type {Number}
    */
-  port: parseInt(process.env.REDIS_PORT),
+  port: +process.env.REDIS_PORT,
 
   /**
    * Redis password.

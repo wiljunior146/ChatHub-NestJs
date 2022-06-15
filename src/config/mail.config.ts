@@ -13,7 +13,7 @@ export default registerAs('mail', () => ({
    * 
    * @type {Number}
    */
-  port: process.env.MAIL_PORT,
+  port: +process.env.MAIL_PORT,
 
   /**
    * Mail auth username.

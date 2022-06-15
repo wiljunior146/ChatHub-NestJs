@@ -6,11 +6,17 @@ import { Contact } from 'src/models/contacts/entities/contact.entity';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from 'src/config/app.config';
 import { Message } from 'src/models/messages/entities/message.entity';
+import { Invitation } from 'src/models/invitations/entities/invitation.entity';
 
 @Module({
   imports: [
     ConfigModule.forFeature(appConfig),
-    TypeOrmModule.forFeature([User, Contact, Message])
+    TypeOrmModule.forFeature([
+      User,
+      Contact,
+      Message,
+      Invitation
+    ])
   ],
   providers: [UsersSeederService],
   exports: [UsersSeederService]

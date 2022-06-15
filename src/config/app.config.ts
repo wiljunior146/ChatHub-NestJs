@@ -28,7 +28,7 @@ export default registerAs('app', () => ({
    *
    * @type {Number}
    */
-  port: parseInt(process.env.APP_PORT, 10) || 3000,
+  port: +process.env.APP_PORT || 3000,
 
   /**
    * Application default password for generating users.

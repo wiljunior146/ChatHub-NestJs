@@ -1,4 +1,6 @@
-export default {
+import { registerAs } from "@nestjs/config";
+
+export default registerAs('auth', () => ({
   /**
    * Expressed in seconds or a string describing a time span.
    *
@@ -13,4 +15,4 @@ export default {
    * @type {String}
    */
   secretKey: process.env.AUTH_SECRET_KEY,
-}
+}));

@@ -1,4 +1,4 @@
-import { MongoRepository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/models/users/entities/user.entity';
@@ -11,16 +11,17 @@ import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
 import * as bcrypt from 'bcrypt';
 import appConfig from 'src/config/app.config';
 import { ConfigType } from '@nestjs/config';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UsersSeederService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: MongoRepository<User>,
+    private usersRepository: Repository<User>,
     @InjectRepository(Contact)
-    private contactsRepository: MongoRepository<Contact>,
+    private contactsRepository: Repository<Contact>,
     @InjectRepository(Message)
-    private messagesRepository: MongoRepository<Message>,
+    private messagesRepository: Repository<Message>,
     @Inject(appConfig.KEY)
     private appConfiguration: ConfigType<typeof appConfig>,
   ) {}
@@ -71,7 +72,7 @@ export class UsersSeederService {
       });
     }
 
-    await this.usersRepository.insertMany(staffs);
+    await this.usersRepository.insert(staffs);
 
     Logger.log('Done seeding staffs.');
   }
@@ -111,7 +112,7 @@ export class UsersSeederService {
         role: Role.User
       });
 
-      const roomId = 'xxxx';
+      const roomId = uuidv4();
       let contacts: any[] = [
         {
           userId: user.id,
@@ -129,7 +130,7 @@ export class UsersSeederService {
         }
       ];
       
-      await this.contactsRepository.insertMany(contacts);
+      await this.contactsRepository.insert(contacts);
 
       let messages: any[] =  [];
 
@@ -143,7 +144,7 @@ export class UsersSeederService {
         });
       }
 
-      this.messagesRepository.insertMany(messages);
+      this.messagesRepository.insert(messages);
     }
 
     Logger.log(`Done seeding users with contacts and messages.`);

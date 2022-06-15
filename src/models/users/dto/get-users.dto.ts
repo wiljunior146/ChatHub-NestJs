@@ -1,35 +1,33 @@
-import { IsNotEmpty, IsInt, Min, Max, IsOptional, IsIn } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsInt,
+  Min,
+  Max,
+  IsOptional,
+  IsIn
+} from 'class-validator';
+import {
+  isNotEmptyMessage,
+  isIntMessage,
+  isInMessage,
+  minMessage,
+  maxMessage
+} from 'src/lang/validation.lang';
 import { Role } from 'src/common/enums/role.enum';
 
 export class GetUsersDto {
-  @IsNotEmpty({
-    message: 'The page is required.'
-  })
-  @IsInt({
-    message: 'The page must be an integer.'
-  })
-  @Min(1, {
-    message: 'The page must be at least $constraint1.'
-  })
+  @IsNotEmpty({ message: isNotEmptyMessage('page') })
+  @IsInt({ message: isIntMessage('page') })
+  @Min(1, { message: minMessage('page') })
   page: number;
 
-  @IsNotEmpty({
-    message: 'The limit is required.'
-  })
-  @IsInt({
-    message: 'The limit must be an integer.'
-  })
-  @Min(5, {
-    message: 'The limit must be at least $constraint1.'
-  })
-  @Max(100, {
-    message: 'The limit must not be greater than $constraint1.'
-  })
+  @IsNotEmpty({ message: isNotEmptyMessage('limit') })
+  @IsInt({ message: isIntMessage('limit') })
+  @Min(5, { message: minMessage('limit') })
+  @Max(100, { message: maxMessage('limit') })
   limit: number;
 
   @IsOptional()
-  @IsIn([Role.Staff, Role.User], {
-    message: 'The selected role is invalid.'
-  })
+  @IsIn([Role.Staff, Role.User], { message: isInMessage('role') })
   role: Role
 }

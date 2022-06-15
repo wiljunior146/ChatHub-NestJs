@@ -8,6 +8,5 @@ import { ROLES_KEY } from 'src/common/constants/app.constant';
  * @note   This decorator is equivalent to @SetMetadata('roles', ['<Role>']).
  *         This decorator must be present if we are gonna use roles guard.
  * @see    https://docs.nestjs.com/guards
- * @return {void}
  */
 export const Roles = (...roles: Role[]) => SetMetadata(ROLES_KEY, roles);

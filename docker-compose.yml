@@ -12,6 +12,7 @@ services:
       POSTGRES_PASSWORD: chathub123
       POSTGRES_DB: chathub
 
+  # Use host.docker.internal as host instead of localhost on connecting to postgres.
   pgadmin4:
     image: dpage/pgadmin4
     restart: always
