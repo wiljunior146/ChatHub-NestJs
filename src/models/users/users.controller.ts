@@ -9,7 +9,8 @@ import {
   ClassSerializerInterceptor,
   UseInterceptors,
   Query,
-  ParseIntPipe
+  ParseIntPipe,
+  UseGuards
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,8 +18,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { GetUsersDto } from './dto/get-users.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { Role } from 'src/common/enums/role.enum';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { InjectParamToBody } from 'src/common/decorators/inject-param.decorator';
 
 @ApiTags('Users')
+@Roles(Role.Admin)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('admin/users')
 export class UsersController {
   constructor(
@@ -42,6 +50,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @InjectParamToBody('id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto

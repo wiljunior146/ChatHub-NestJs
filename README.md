@@ -49,9 +49,6 @@ Update .env values.
 # It is unsafe to use synchronize: true for schema synchronization
 # on production once you get data in your database.
 
-# Since we are using mongodb the TypeORM will only syncs just by creating indices
-# if the synchronize is true.
-
 $ yarn run seed
 ```
 

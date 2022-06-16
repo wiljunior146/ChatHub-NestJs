@@ -1,8 +1,22 @@
 import { PickType } from '@nestjs/swagger';
-import { IsDefined, IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import {
+  IsDefined,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MaxLength
+} from 'class-validator';
 import { REQUEST_CONTEXT } from 'src/common/constants/request.constant';
-import { UserUniqueWithIgnore } from 'src/common/decorators/validations/users/user-unique-with-ignore.decorator';
-import { isEmailMessage, isNotEmptyMessage, isStringMessage, maxLengthMessage, userUniqueMessage } from 'src/lang/validation.lang';
+import {
+  UserUniqueWithIgnore
+} from 'src/common/decorators/validations/users/user-unique-with-ignore.decorator';
+import {
+  isEmailMessage,
+  isNotEmptyMessage,
+  isStringMessage,
+  maxLengthMessage,
+  userUniqueMessage
+} from 'src/lang/validation.lang';
 import { CreateUserDto } from './create-user.dto';
 
 export class UpdateUserDto extends PickType(
@@ -31,7 +45,7 @@ export class UpdateUserDto extends PickType(
    * 
    *       This property will be stripped so it won't be used in controller.
    * 
-   * @see  https://github.com/AvantaR/nestjs-validation-tips/issues/1
+   * @see  https://docs.nestjs.com/techniques/validation#stripping-properties
    */
   @IsDefined()
   [REQUEST_CONTEXT]: any;

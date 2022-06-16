@@ -34,5 +34,4 @@ import { JwtConfigService } from 'src/providers/jwt-config.service';
     MatchRule
   ]
 })
-
 export class AuthModule {}

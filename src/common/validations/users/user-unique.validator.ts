@@ -21,7 +21,7 @@ export class UserUniqueRule implements ValidatorConstraintInterface {
   async validate(value: string, validationArguments: any): Promise<boolean> {
 
     const total = await this.usersRepository.count({
-      [validationArguments.property]: value
+      [validationArguments.property]: value,
     });
 
     return !total;

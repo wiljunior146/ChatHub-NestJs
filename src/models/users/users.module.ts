@@ -6,6 +6,9 @@ import { User } from './entities/user.entity';
 import { UserUniqueRule } from 'src/common/validations/users/user-unique.validator';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from 'src/config/app.config';
+import {
+  UserUniqueWithIgnoreRule
+} from 'src/common/validations/users/user-unique-with-ignore.validator';
 
 @Module({
   imports: [
@@ -13,7 +16,7 @@ import appConfig from 'src/config/app.config';
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [UsersController],
-  providers: [UsersService, UserUniqueRule],
+  providers: [UsersService, UserUniqueRule, UserUniqueWithIgnoreRule],
   exports: [UsersService]
 })
 export class UsersModule {}

@@ -16,6 +16,7 @@ import databaseConfig from './config/database.config';
 import queueConfig from './config/queue.config';
 import routerConfig from './config/router.config';
 import { AuthModule } from './authentication/auth.module';
+import { ProfileModule } from './models/profile/profile.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { AuthModule } from './authentication/auth.module';
     UsersModule,
     MessagesModule,
     ContactsModule,
-    InvitationsModule
+    InvitationsModule,
+    ProfileModule
   ],
   providers: [
     {

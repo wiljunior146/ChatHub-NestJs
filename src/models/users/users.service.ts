@@ -50,18 +50,21 @@ export class UsersService {
    * Get user with the specified id.
    */
   async findOne(id: number): Promise<User> {
-    return await this.usersRepository.findOne(id);
+    return await this.usersRepository.findOneOrFail(id);
   }
 
   /**
    * Update user with the specified id.
    */
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.usersRepository.findOneOrFail(id);
     if (user.role === Role.Admin) {
       throw new ForbiddenException('The selected user is an admin.');
     }
-    return await this.usersRepository.save({id, ...updateUserDto});
+
+    await this.usersRepository.save({ id, ...updateUserDto });
+
+    return await this.usersRepository.findOne(id);
   }
 
   /**
