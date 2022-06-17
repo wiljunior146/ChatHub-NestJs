@@ -28,6 +28,10 @@ export function InjectUserToParam() {
  * Injecting current user entity to a specified request type to be
  * able to use on custom class validator and stripe the user entity after.
  *
+ * @note In order to use the injected property the REQUEST_CONTEXT
+ *       must be defined on the specific DTO since it will be striped if
+ *       the whitelist is true.
+ * @see  https://docs.nestjs.com/techniques/validation#stripping-properties
  * @see https://github.com/AvantaR/nestjs-validation-tips
  */
 export function InjectUserTo(request: Request.Query | Request.Body | Request.Params) {

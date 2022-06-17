@@ -6,11 +6,11 @@ import {
 import { Injectable } from '@nestjs/common';
 
 /**
- * Validate if the property value is match on the value of the passed property.
+ * Validate if the property value is the same on the value of the passed property.
  */
 @Injectable()
 @ValidatorConstraint({name: 'Match'})
-export class MatchRule implements ValidatorConstraintInterface {
+export class SameRule implements ValidatorConstraintInterface {
 
   validate(value: any, args: ValidationArguments): boolean {
     const [property] = args.constraints;

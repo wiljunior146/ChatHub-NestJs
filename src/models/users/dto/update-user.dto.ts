@@ -11,42 +11,31 @@ import {
   UserUniqueWithIgnore
 } from 'src/common/decorators/validations/users/user-unique-with-ignore.decorator';
 import {
-  isEmailMessage,
-  isNotEmptyMessage,
-  isStringMessage,
-  maxLengthMessage,
-  userUniqueMessage
-} from 'src/lang/validation.lang';
+  isEmailOption,
+  isNotEmptyOption,
+  isStringOption,
+  maxLengthOption,
+  userUniqueOption
+} from 'src/common/helpers/validation.helper';
 import { CreateUserDto } from './create-user.dto';
 
 export class UpdateUserDto extends PickType(
   CreateUserDto,
   ['firstName', 'lastName'] as const
 ) {
-  @IsNotEmpty({ message: isNotEmptyMessage('username') })
-  @IsString({ message: isStringMessage('username') })
-  @MaxLength(255, { message: maxLengthMessage('username') })
-  @UserUniqueWithIgnore({ message: userUniqueMessage('username') })
+  @UserUniqueWithIgnore(userUniqueOption())
+  @MaxLength(255, maxLengthOption())
+  @IsString(isStringOption())
+  @IsNotEmpty(isNotEmptyOption())
   username: string;
 
-  @IsNotEmpty({ message: isNotEmptyMessage('email') })
-  @IsString({ message: isStringMessage('email') })
-  @IsEmail({}, { message: isEmailMessage() })
-  @MaxLength(255, { message: maxLengthMessage('email') })
-  @UserUniqueWithIgnore({ message: userUniqueMessage('email') })
+  @UserUniqueWithIgnore(userUniqueOption())
+  @IsEmail({}, isEmailOption())
+  @MaxLength(255, maxLengthOption())
+  @IsString(isStringOption())
+  @IsNotEmpty(isNotEmptyOption())
   email: string;
 
-  /**
-   * The REQUEST_CONTEXT is the property that will be injected to DTO for custom validation.
-   * 
-   * @note If whitelist is true the unexpected or not registered property in DTO
-   *       will be removed so it will cause an error on validation if
-   *       the REQUEST_CONTEXT is not defined in DTO.
-   * 
-   *       This property will be stripped so it won't be used in controller.
-   * 
-   * @see  https://docs.nestjs.com/techniques/validation#stripping-properties
-   */
   @IsDefined()
   [REQUEST_CONTEXT]: any;
 }

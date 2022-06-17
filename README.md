@@ -92,6 +92,26 @@ as long as the class name is the same.
 
 If the swagger dectected another DTO class with the same name it will
 still use the schema of the first one that is already fetched for the whole project.
+
+```
+`For DTO validations`
+```
+The order of all decorators in DTO are read in reverse.
+
+This will only be a concern if we set stopAtFirstError as true
+since by default it's a false and if it's a false it will trigger all validation.
+
+We set stopAtFirstError as true so it won't proceed if the first validation fails
+and to avoid checking again in another validation.
+
+Like if it is empty we will not proceed to checking if it a string or it's match
+the user's current password.
+
+IE:
+
+@UserPassword()   Last
+@IsString({)      Second
+@IsNotEmpty()     First
 ```
 
 - - - -

@@ -28,7 +28,11 @@ export function InjectUserIdToParam() {
  * Injecting current user Id to a specified request type to be
  * able to use on custom class validator and stripe the user Id after.
  *
- * @see https://github.com/AvantaR/nestjs-validation-tips
+ * @note In order to use the injected property the REQUEST_CONTEXT
+ *       must be defined on the specific DTO since it will be striped if
+ *       the whitelist is true.
+ * @see  https://docs.nestjs.com/techniques/validation#stripping-properties
+ * @see  https://github.com/AvantaR/nestjs-validation-tips
  */
 export function InjectUserIdTo(request: Request.Query | Request.Body | Request.Params) {
   return applyDecorators(

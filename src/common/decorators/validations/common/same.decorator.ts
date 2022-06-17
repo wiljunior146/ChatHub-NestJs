@@ -1,14 +1,14 @@
 import { ValidationOptions, registerDecorator } from 'class-validator';
-import { MatchRule } from 'src/common/validations/common/match.validator';
+import { SameRule } from 'src/common/validations/common/same.validator';
 
-export function Match(property: string, validationOptions?: ValidationOptions) {
+export function Same(property: string, validationOptions?: ValidationOptions) {
   return function (object: any, propertyName: string) {
     registerDecorator({
-      name: 'Match',
+      name: 'Same',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      validator: MatchRule,
+      validator: SameRule,
       constraints: [property]
     });
   };

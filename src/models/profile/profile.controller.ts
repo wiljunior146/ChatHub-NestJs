@@ -3,6 +3,8 @@ import { ProfileService } from './profile.service';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { InjectUserIdToBody } from 'src/common/decorators/inject-user-id.decorator';
+import { InjectUserToBody } from 'src/common/decorators/inject-user.decorator';
 
 @UseGuards(JwtAuthGuard)
 @Controller('profile')
@@ -15,12 +17,20 @@ export class ProfileController {
   }
 
   @Put()
-  update(@Body() updateProfileDto: UpdateProfileDto) {
-    return this.profileService.update(updateProfileDto);
+  @InjectUserIdToBody()
+  update(
+    @Body() updateProfileDto: UpdateProfileDto,
+    @Req() request: any
+  ) {
+    return this.profileService.update(request.user.id, updateProfileDto);
   }
 
   @Patch('password')
-  updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
-    return this.profileService.updatePassword(updatePasswordDto);
+  @InjectUserToBody()
+  updatePassword(
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Req() request: any
+  ) {
+    return this.profileService.updatePassword(request.user.id, updatePasswordDto);
   }
 }

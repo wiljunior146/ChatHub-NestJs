@@ -6,28 +6,28 @@ import {
   IsOptional,
   IsIn
 } from 'class-validator';
-import {
-  isNotEmptyMessage,
-  isIntMessage,
-  isInMessage,
-  minMessage,
-  maxMessage
-} from 'src/lang/validation.lang';
 import { Role } from 'src/common/enums/role.enum';
+import {
+  isInOption,
+  isIntOption,
+  isNotEmptyOption,
+  maxOption,
+  minOption
+} from 'src/common/helpers/validation.helper';
 
 export class GetUsersDto {
-  @IsNotEmpty({ message: isNotEmptyMessage('page') })
-  @IsInt({ message: isIntMessage('page') })
-  @Min(1, { message: minMessage('page') })
+  @Min(1, minOption())
+  @IsInt(isIntOption())
+  @IsNotEmpty(isNotEmptyOption())
   page: number;
 
-  @IsNotEmpty({ message: isNotEmptyMessage('limit') })
-  @IsInt({ message: isIntMessage('limit') })
-  @Min(5, { message: minMessage('limit') })
-  @Max(100, { message: maxMessage('limit') })
+  @Max(100, maxOption())
+  @Min(5, minOption())
+  @IsInt(isIntOption())
+  @IsNotEmpty(isNotEmptyOption())
   limit: number;
 
+  @IsIn([Role.Staff, Role.User], isInOption())
   @IsOptional()
-  @IsIn([Role.Staff, Role.User], { message: isInMessage('role') })
   role: Role
 }

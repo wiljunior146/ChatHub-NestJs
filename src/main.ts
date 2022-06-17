@@ -7,8 +7,8 @@ import * as express from 'express';
 import {
   ValidationPipe,
   ValidationError,
-  BadRequestException,
-  HttpStatus
+  HttpStatus,
+  UnprocessableEntityException
 } from '@nestjs/common';
 import {
   EntityNotFoundExceptionFilter
@@ -61,7 +61,7 @@ async function bootstrap() {
     },
     exceptionFactory: (validationErrors: ValidationError[] = []) => {
       const errors = validationErrors.map((value) => omit(value, 'target'));
-      return new BadRequestException(errors);
+      return new UnprocessableEntityException(errors);
     },
   }));
 

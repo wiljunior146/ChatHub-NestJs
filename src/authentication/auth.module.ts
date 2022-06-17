@@ -10,9 +10,9 @@ import { AuthService } from "./auth.service";
 import { LocalStrategy } from "./local.strategy";
 import { JwtStrategy } from "./jwt.strategy";
 import { UserUniqueRule } from "src/common/validations/users/user-unique.validator";
-import { MatchRule } from "src/common/validations/common/match.validator";
 import { JwtModule } from "@nestjs/jwt";
 import { JwtConfigService } from 'src/providers/jwt-config.service';
+import { SameRule } from "src/common/validations/common/same.validator";
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { JwtConfigService } from 'src/providers/jwt-config.service';
     LocalStrategy,
     JwtStrategy,
     UserUniqueRule,
-    MatchRule
+    SameRule
   ]
 })
 export class AuthModule {}

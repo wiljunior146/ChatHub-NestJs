@@ -37,18 +37,18 @@ export class AuthService {
   /**
    * Authenticate the user.
    */
-  async login(user: any) {
+  async login(user: any): Promise<{ accessToken: string }> {
     const payload = { username: user.username, sub: user.id };
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken: await this.jwtService.sign(payload),
     };
   }
 
   /**
    * Register or create a new normal user.
    */
-  async register(registerDto: RegisterDto) {
-    const { password, passwordConfirmation, ...data } = registerDto;
+  async register(registerDto: RegisterDto): Promise<User> {
+    const { password, confirmPassword, ...data } = registerDto;
     const user = await this.usersRepository.save({
       ...data,
       role: Role.User,

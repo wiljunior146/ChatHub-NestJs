@@ -9,9 +9,6 @@ import { MongoRepository } from 'typeorm';
 
 /**
  * User exists validation.
- * 
- * @note It will only walid if the user's Id or value of the current property
- *       exists on our database.
  */
 @Injectable()
 @ValidatorConstraint({ name: 'UserExistsRule', async: true })

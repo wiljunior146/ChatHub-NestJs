@@ -16,7 +16,11 @@ import {
     TypeOrmModule.forFeature([User]),
   ],
   controllers: [UsersController],
-  providers: [UsersService, UserUniqueRule, UserUniqueWithIgnoreRule],
-  exports: [UsersService]
+  providers: [
+    UsersService,
+    UserUniqueRule,
+    UserUniqueWithIgnoreRule
+  ],
+  exports: [UsersService],
 })
 export class UsersModule {}
