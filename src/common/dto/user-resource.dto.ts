@@ -1,6 +1,7 @@
 import { Role } from 'src/common/enums/role.enum';
 import { Exclude, Expose } from 'class-transformer';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { User } from '../../models/users/entities/user.entity';
 
 export class UserResourceDto {
   id: number;
@@ -29,7 +30,15 @@ export class UserResourceDto {
 
   updatedAt: Date;
 
-  constructor(partial: Partial<UserResourceDto>) {
+  constructor(partial?: Partial<UserResourceDto>) {
     Object.assign(this, partial);
+  }
+
+  static collection(users: User[] = []) {
+    return users.map((user) => new UserResourceDto(user));
+  }
+
+  static make(user: User) {
+    return new UserResourceDto(user);
   }
 }

@@ -1,6 +1,6 @@
 /**
- * This DTO will be only used for swagger since the payloads
- * will be handled by LocalAuthGuard
+ * This DTO will be only used for swagger schema type hinting
+ * since the payloads will be handled by LocalAuthGuard
  * so there will be no validations that will be used.
  */
 export class LoginDto {

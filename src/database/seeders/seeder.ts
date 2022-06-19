@@ -9,7 +9,7 @@ export class Seeder {
   constructor(
     private readonly usersSeederService: UsersSeederService,
     @Inject(appConfig.KEY)
-    private appConfiguration: ConfigType<typeof appConfig>,
+    private readonly appConfiguration: ConfigType<typeof appConfig>,
   ) {}
 
   /**

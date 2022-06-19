@@ -17,19 +17,17 @@ import { v4 as uuidv4 } from 'uuid';
 export class UsersSeederService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>,
     @InjectRepository(Contact)
-    private contactsRepository: Repository<Contact>,
+    private readonly contactsRepository: Repository<Contact>,
     @InjectRepository(Message)
-    private messagesRepository: Repository<Message>,
+    private readonly messagesRepository: Repository<Message>,
     @Inject(appConfig.KEY)
-    private appConfiguration: ConfigType<typeof appConfig>,
+    private readonly appConfiguration: ConfigType<typeof appConfig>,
   ) {}
 
   /**
    * Create admin.
-   * 
-   * @return {void}
    */
   async admin () {
     Logger.warn('Seeding admin.');
@@ -49,8 +47,7 @@ export class UsersSeederService {
   /**
    * Create staffs.
    * 
-   * @param  {number = 1}  totalContacts
-   * @return {void}
+   * @param  number  totalContacts
    */
   async staffs(totalStaffs: number = 1) {
     Logger.warn('Seeding staffs.');
@@ -82,8 +79,7 @@ export class UsersSeederService {
    * 
    * @note   This will also create another users base on how
    *         many contacts that needs to create.
-   * @param  {number = 1}  totalContacts
-   * @return {void}
+   * @param  number  totalContacts
    */
   async users(totalContacts: number = 1) {
     Logger.warn(`Seeding users with contacts and messages.`);

@@ -13,7 +13,7 @@ export class ThrottlerConfigService implements ThrottlerOptionsFactory {
   createThrottlerOptions(): ThrottlerModuleOptions {
     return {
       ttl: this.routerConfiguration.ttl,
-      limit: this.routerConfiguration.limit
+      limit: this.routerConfiguration.limit,
     };
   }
 }

@@ -10,7 +10,7 @@ export default registerAs('auth', () => ({
   expiresIn: process.env.AUTH_SIGN_OPTIONS_EXPIRES_IN || '30d',
 
   /**
-   * Secret key to be used on passport authentication type.
+   * Secret key to be used on passport authentication.
    * 
    * @type {String}
    */

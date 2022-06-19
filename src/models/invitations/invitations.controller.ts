@@ -10,27 +10,27 @@ export class InvitationsController {
   constructor(private readonly invitationsService: InvitationsService) {}
 
   @Post()
-  create(@Body() createInvitationDto: CreateInvitationDto) {
-    return this.invitationsService.create(createInvitationDto);
+  async create(@Body() createInvitationDto: CreateInvitationDto) {
+    return await this.invitationsService.create(createInvitationDto);
   }
 
   @Get()
-  findAll() {
-    return this.invitationsService.findAll();
+  async findAll() {
+    return await this.invitationsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.invitationsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.invitationsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInvitationDto: UpdateInvitationDto) {
-    return this.invitationsService.update(+id, updateInvitationDto);
+  async update(@Param('id') id: string, @Body() updateInvitationDto: UpdateInvitationDto) {
+    return await this.invitationsService.update(+id, updateInvitationDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.invitationsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.invitationsService.remove(+id);
   }
 }

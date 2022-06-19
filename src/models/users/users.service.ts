@@ -10,6 +10,7 @@ import appConfig from 'src/config/app.config';
 import * as bcrypt from 'bcrypt';
 import { SALT_OR_ROUNDS } from 'src/common/constants/app.constant';
 import { GetUsersDto } from './dto/get-users.dto';
+import { UserResourceDto } from '../../common/dto/user-resource.dto';
 
 @Injectable()
 export class UsersService {
@@ -37,13 +38,15 @@ export class UsersService {
    */
   async findAll(getUsersDto: GetUsersDto) {
     const { page, limit, role } = getUsersDto;
-    return await this.usersRepository.find({
+    const users = await this.usersRepository.find({
       where: {
         role: role ? role : Not(Role.Admin),
       },
       skip: (page - 1) * limit,
       take: limit,
     });
+
+    return UserResourceDto.collection(users);
   }
 
   /**

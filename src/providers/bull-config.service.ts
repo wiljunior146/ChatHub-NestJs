@@ -16,7 +16,7 @@ export class BullConfigService implements SharedBullConfigurationFactory {
         host: this.queueConfiguration.host,
         port: this.queueConfiguration.port,
         password: this.queueConfiguration.password,
-      }
+      },
     };
   }
 }
