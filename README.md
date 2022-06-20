@@ -25,7 +25,7 @@
 # ChatHub
 
 ## Description
-A simple chatting system.d
+A simple chatting system.
 
 ## Installation
 
@@ -87,8 +87,8 @@ $ yarn run test:cov
 `For Swagger`
 ```
 The name of all DTO classes including entities must be unique because it will
-confused the Swagger even if the path or the imported class is not the same
-as long as the class name is the same.
+confused the Swagger even if the path of the imported class is not the same
+as long as the class name is.
 
 If the swagger dectected another DTO class with the same name it will
 still use the schema of the first one that is already fetched for the whole project.
@@ -104,8 +104,7 @@ since by default it's a false and if it's a false it will trigger all validation
 We set stopAtFirstError as true so it won't proceed if the first validation fails
 and to avoid checking again in another validation.
 
-Like if it is empty we will not proceed to checking if it a string or it's match
-the user's current password.
+Like if it is empty we will not proceed to checking if it's a string.
 
 IE:
 

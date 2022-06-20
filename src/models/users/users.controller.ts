@@ -40,7 +40,7 @@ export class UsersController {
 
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
-  async findAll(@Query() getUsersDto: GetUsersDto): Promise<UserResourceDto[]> {
+  async findAll(@Query() getUsersDto: GetUsersDto) {
     return await this.usersService.findAll(getUsersDto);
   }
 

@@ -4,10 +4,13 @@ import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { User } from '../../models/users/entities/user.entity';
 
 export class UserResourceDto {
+  @ApiProperty()
   id: number;
 
+  @ApiProperty()
   firstName: string;
 
+  @ApiProperty()
   lastName: string;
 
   @ApiProperty()
@@ -16,29 +19,43 @@ export class UserResourceDto {
     return `${this.firstName} ${this.lastName}`;
   }
 
+  @ApiProperty()
   username: string;
 
+  @ApiProperty()
   email: string;
 
   @ApiHideProperty()
   @Exclude()
   password: string;
 
+  @ApiProperty()
   role: Role;
 
+  @ApiProperty()
   createdAt: Date;
 
+  @ApiProperty()
   updatedAt: Date;
 
+  /**
+   * Construct a new UserResourceDTO instance.
+   */
   constructor(partial?: Partial<UserResourceDto>) {
     Object.assign(this, partial);
   }
 
+  /**
+   * Create a new UserResourceDto collection instance.
+   */
   static collection(users: User[] = []) {
-    return users.map((user) => new UserResourceDto(user));
+    return { data: users.map((user) => new UserResourceDto(user)) };
   }
 
+  /**
+   * Create a new UserResourceDto instance.
+   */
   static make(user: User) {
-    return new UserResourceDto(user);
+    return { data: new UserResourceDto(user) };
   }
 }
